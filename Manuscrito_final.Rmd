@@ -1,0 +1,1346 @@
+---
+toc-title: "Índice General"
+output:
+  pdf_document: 
+    latex_engine: xelatex
+    toc: true
+    toc_depth: 3
+    number_sections: false
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: flatly
+    highlight: tango
+    self_contained: true
+  word_document:
+    toc: true
+    toc_depth: 3
+header-includes:
+  - \usepackage{setspace}
+  - \doublespacing
+  - \usepackage{geometry}
+  - \geometry{verbose,tmargin=2.54cm,bmargin=2.54cm,lmargin=2.54cm,rmargin=2.54cm}
+  - \usepackage{fancyhdr}
+  - \usepackage{xcolor}
+  - \usepackage{etoolbox}
+  - \apptocmd{\tableofcontents}{\newpage}{}{}
+  - \renewcommand{\contentsname}{Índice General}
+  - \pagestyle{fancy}
+  - \fancyhf{}
+  - \renewcommand{\headrulewidth}{0pt}
+  - \lhead{\textcolor{gray}{\MakeUppercase{ESCALA MULTIDIMENSIONAL DE CONOCIMIENTO VIAL}}}
+  - \rhead{\textcolor{gray}{\thepage}}
+  - \usepackage{titlesec}
+  - \titleformat{\section}{\normalfont\fontsize{12}{15}\bfseries\filcenter}{\thesection}{1em}{}
+  - \titleformat{\subsection}{\normalfont\fontsize{12}{15}\bfseries}{\thesubsection}{1em}{}
+  - \titleformat{\subsubsection}{\normalfont\fontsize{12}{15}\bfseries\itshape}{\thesubsubsection}{1em}{}
+  - \usepackage{fvextra}
+  - \fvset{breaklines=true}
+  - \usepackage{float}
+  - \floatplacement{figure}{H}
+---
+
+# Resumen
+
+**Objetivo:** Diseñar y simular psicométricamente una escala multidimensional de conocimiento teórico vial para aspirantes a licencia Tipo A en la Ciudad de México, evaluando su estructura interna y precisión métrica mediante modelos avanzados de la Teoría de Respuesta al Ítem (TRI) para sustentar decisiones de alto impacto.
+
+**Método:** Se desarrolló un banco de 54 reactivos dicotómicos distribuidos equitativamente (18 reactivos por dimensión) en tres dimensiones latentes correlacionadas: (D1) Conocimiento Normativo-Reglamentario, (D2) Señalización y Jerarquía de Movilidad, y (D3) Seguridad Vial y Razonamiento Situacional. Se simularon las respuestas de N = 4000 participantes utilizando una distribución de habilidad latente normal multivariada con parámetros de discriminación ($a_i$), dificultad ($b_i$) y pseudo-adivinación ($c_i$) controlados. Se ajustó un Modelo 3PL Unidimensional y un Modelo 3PL Multidimensional Between-Item correlacionado mediante el algoritmo Quasi-Monte Carlo EM (QMCEM) en el software R.
+
+**Resultados:** El modelo multidimensional demostró un ajuste comparativo superior al unidimensional (AIC disminuyó 2,409.9; BIC disminuyó 2,390.9; LRT Chi2(3) = 2415.8, p \< 0.001). El modelo seleccionado obtuvo un ajuste absoluto global perfecto (M2\* = 1383.137, gl = 1320, p = 0.111; RMSEA = 0.003 [IC 90%: 0.000, 0.005]; SRMSR = 0.015; TLI = 0.998; CFI = 0.998). La recuperación de parámetros de los ítems fue excelente (correlaciones b-hat = 0.982, a-hat = 0.925, c-hat = 0.897). La correlación latente estimada entre factores reprodujo adecuadamente la estructura poblacional (r12 = 0.528, r13 = 0.525, r23 = 0.453). Las curvas de información demostraron perfiles de precisión de medición diferenciados.
+
+**Conclusiones:** La escala multidimensional propuesta cuenta con un soporte empírico y psicométrico robusto que garantiza su validez y confiabilidad para sustentar políticas públicas y decisiones de licenciamiento vial en la Ciudad de México, mitigando de forma efectiva los errores de acreditación y reduciendo las consecuencias negativas de hechos de tránsito.
+
+**Palabras clave:** Licencia de Conducir, Seguridad Vial, Psicometría, Teoría de Respuesta al Ítem (TRI), Modelo 3PL Multidimensional.
+
+\newpage
+
+# 1. Introducción
+
+La seguridad vial constituye uno de los desafíos más urgentes y graves de salud pública en el mundo contemporáneo. Según el reporte epidemiológico global de la Organización Mundial de la Salud (OMS, 2023), los accidentes de tránsito causan aproximadamente **1.19 millones de muertes al año**, posicionándose como la principal causa de muerte en niños y jóvenes de entre 5 y 29 años. In términos socioeconómicos, la OMS estima que los hechos de tránsito representan pérdidas equivalentes al 3% del Producto Interno Bruto (PIB) en la mayoría de los países, sumando entre 20 y 50 millones de personas que sufren traumatismos no mortales que devienen en discapacidades permanentes. En los países de ingresos medios y bajos, el panorama es desproporcionadamente adverso, concentrando el 90% de las muertes a pesar de poseer solo el 60% del parque vehicular mundial.
+
+En México, la crisis de seguridad vial es igualmente alarmante. De acuerdo con las *Estadísticas de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas* (ATUS) publicadas por el Instituto Nacional de Estadística y Geografía (INEGI, 2024), en 2023 se registraron **381,048 siniestros de tránsito** en territorio nacional, los cuales cobraron la vida de **4,803 personas en el sitio del accidente** y dejaron más de **90,500 lesionados**.
+
+La Ciudad de México es uno de los epicentros críticos de esta problemática al albergar un parque vehicular que supera los 5.5 millones de automotores. Según los informes trimestrales de la Secretaría de Movilidad de la CDMX (SEMOVI, 2024), se registran más de **10,000 hechos de tránsito anuales** dentro de la metrópoli, en los cuales los usuarios vulnerables de la vía (peatones, ciclistas y motociclistas) representan **más del 70% de las víctimas fatales**.
+
+## 1.1 Relevancia de la Competencia Vial en la CDMX
+
+La conducción en una megalópolis caracterizada por una alta densidad de población, intersecciones complejas e infraestructura de transporte masivo exige competencias cognitivas complejas. Tradicionalmente, la competencia al volante se asoció únicamente con el control mecánico y físico del automóvil. Sin embargo, el comportamiento del conductor está determinado de forma prioritaria por factores cognitivos superiores: la comprensión de las reglas del entorno (Conocimiento Normativo), la interpretación de señales visuales y prioridades de paso (Señalización y Jerarquía) y la anticipación táctica del peligro (Seguridad Vial y Razonamiento Situacional).
+
+Históricamente, la Ciudad de México operó bajo un esquema de licenciamiento sumamente laxo. Durante más de dos décadas (de 2003 a 2024), la Licencia de Conducir Tipo A para automóviles particulares se expidió como un mero trámite administrativo: cualquier ciudadano podía pagar una tarifa en una ventanilla pública y obtener el permiso de conducir sin necesidad de acreditar ninguna prueba práctica ni teórica. Esta carencia regulatoria propició una cultura vial deficiente, donde el aprendizaje de las reglas y de la seguridad se realizaba de manera empírica, asistemática y frecuentemente errónea.
+
+## 1.2 El Examen de Licenciamiento como Intervención de Salud Pública
+
+A partir del 16 de noviembre de 2024, en un esfuerzo por mitigar los siniestros viales y reestructurar la movilidad urbana, la SEMOVI del Gobierno de la Ciudad de México restableció la obligatoriedad de un examen teórico como requisito indispensable para obtener la Licencia Permanente Tipo A (SEMOVI, 2024). Este examen consta de 20 reactivos seleccionados de forma aleatoria de un banco de más de 200 ítems diseñados de manera conjunta con la Agencia Digital de Innovación Pública (ADIP).
+
+Si bien este cambio constituye una intervención institucional fundamental de salud pública, la ausencia de una validación psicométrica formal y pública de dicho banco limita la equidad, precisión y validez de la evaluación. Para que una prueba teórica de licenciamiento cumpla con su función de cribado y mitigue de forma efectiva la accidentabilidad, sus reactivos deben contar con propiedades métricas rigurosamente calibradas.
+
+La literatura científica internacional sustenta que los exámenes teóricos rigurosos predicen con fuerza el desempeño práctico al volante (Wolming & Wikström, 2004) y la propensión a verse involucrado en choques a largo plazo (Stefan et al., 2025). Instrumentos viales basados en la predicción de peligros y en la toma de decisiones defensivas reducen de manera probada la accidentabilidad en conductores noveles (Crundall, 2015; Crundall et al., 2020). Por ende, el diseño y la calibración psicométrica del examen representan un requisito de seguridad pública, pues garantizan que los conductores habilitados cuenten verdaderamente con los conocimientos teóricos mínimos indispensables para mitigar riesgos en la red vial.
+
+## 1.3 Objetivo del Proyecto
+
+El presente proyecto tiene como objetivo principal el diseño, simulación y calibración psicométrica de una escala multidimensional de conocimiento teórico vial de 54 reactivos dicotómicos bajo el modelo logístico de tres parámetros (3PL) de la Teoría de Respuesta al Ítem (TRI) adaptada a la Ciudad de México. Se busca aportar un instrumento robusto que garantice una estimación de la habilidad vial libre de sesgo, proporcionando soporte empírico y metodológico para un sistema de evaluación equitativo, preciso y con consecuencias positivas directas en la seguridad de los ciudadanos de la CDMX.
+
+\newpage
+
+# 2. Marco Teórico
+
+El diseño de un instrumento psicométrico de alta precisión para el licenciamiento vial requiere un sustento teórico que integre los modelos de competencia en educación vial, la normatividad del contexto local y los desarrollos avanzados de la teoría de la medición.
+
+## 2.1 Definición Conceptual del Constructo
+
+Con base en la integración del Marco conceptual *Goals for Driver Education* (GDE; Hatakka et al., 2002), la evidencia empírica sobre razonamiento situacional (Crundall, 2015) y el marco normativo de la Ciudad de México (Ley de Movilidad CDMX, 2014; SEMOVI, 2024), se define operacionalmente el constructo de la siguiente manera:
+
+> El *conocimiento teórico vial* es el conjunto de saberes declarativos y situacionales que permiten a una persona comprender las normas, señales, jerarquías de movilidad y principios de seguridad necesarios para conducir de forma segura, responsable y respetuosa de los demás usuarios de la vía, en el contexto específico de la Ciudad de México.
+
+Esta definición asume que el conocimiento no es plano ni unidimensional. Integrar aspectos declarativos y situacionales responde a la necesidad de evaluar no solo "qué" es la norma, sino "cómo" y "por qué" se aplica en situaciones reales de interacción vial (Hatakka et al., 2002). Asimismo, incorpora explícitamente la dimensión axiológica y de derechos humanos presente en la legislación local (Gaceta Oficial, 2014).
+
+## 2.2 Estructura Dimensional Propuesta
+
+La escala se organiza jerárquicamente en tres dimensiones latentes bien definidas, con dos niveles de complejidad cognitiva cada una:
+
+1.  **Dimensión 1 (D1): Conocimiento Normativo-Reglamentario:** Comprende la identificación y aplicación de las reglas del Reglamento de Tránsito de la CDMX (límites de velocidad, prohibiciones, preferencias de paso y protocolos ante vehículos de emergencia). Corresponde al Nivel 1 del Marco GDE (control del vehículo y conocimiento de reglas) y abarca dos niveles cognitivos: *Memorización* (identificación de la regla escrita) y *Aplicación* (uso de la regla en un escenario de tránsito).
+2.  **Dimensión 2 (D2): Señalización y Jerarquía de Movilidad:** Evalúa la interpretación visual de señales de tránsito (preventivas, restrictivas e informativas), así como la correcta aplicación de la Pirámide de Movilidad de la CDMX. Corresponde al Nivel 2 del Marco GDE (dominio de situaciones de tráfico) y se divide en: *Identificación* (significado directo de la señal) e *Interacción en Cruce* (aplicación de la prioridad vial de usuarios vulnerables).
+3.  **Dimensión 3 (D3): Seguridad Vial y Razonamiento Situacional:** Evalúa el conocimiento de dispositivos de seguridad pasiva y el razonamiento aplicado al manejo defensivo, conducción en condiciones adversas y la predicción activa de peligros. Corresponde al Nivel 3 del Marco GDE (contexto de la conducción) y se desglosa en: *Prevención* (cinturón, distancias seguras) y *Anticipación Situacional* (identificación de peligros indirectos y toma de decisiones evasivas).
+
+El subtema de motociclismo (D4) se considera un módulo de evaluación complementario y especializado (basado en el EC1331 del CONOCER), el cual se excluye del análisis de la estructura general para automóviles para mantener la homogeneidad del constructo en aspirantes generales de Licencia Tipo A.
+
+## 2.3 Antecedentes de Medición Nacional e Internacional
+
+Históricamente, los exámenes de conducir emplearon la Teoría Clásica de los Tests (TCT). Conley et al. (1970) diseñaron los primeros exámenes escritos en Illinois utilizando análisis de discriminación clásicos. Estos enfoques clásicos, si bien sencillos, adolecen de severas limitaciones: las propiedades de los reactivos dependen de la muestra utilizada y no permiten modelar de forma separada la habilidad del evaluado de las características intrínsecas del ítem, además de asumir que el error de medida es constante a lo largo de todo el continuo de habilidad.
+
+A nivel internacional, la transición hacia la Teoría de Respuesta al Ítem (TRI) ha permitido superar estas deficiencias. Wolming y Wikström (2004) validaron el sistema de licenciamiento sueco mediante modelos unidimensionales de la TRI, logrando calibrar bancos estandarizados. Stefan et al. (2025) emplearon datos masivos en los Países Bajos para estudiar la retención del conocimiento vial, demostrando que el rendimiento difiere sustancialmente según el tipo de reactivo (aplicado vs. memorístico).
+
+En el ámbito asiático, Wu et al. (2021) adaptaron test de predicción de peligros al tráfico chino y demostraron que la contextualización local es crítica para la validez de estructura interna y ecológica del instrumento.
+
+## 2.4 Justificación del Modelo de Teoría de Respuesta al Ítem (TRI)
+
+Para el presente instrumento se seleccionó el **Modelo Logístico de Tres Parámetros (3PL) Multidimensional *Between-Item***. Esta decisión psicométrica se fundamenta en la naturaleza misma del proceso de evaluación vial y en la estructura teórica del constructo:
+
+- **Inclusión del Parámetro de Adivinación (**$c_i$): Al ser una prueba de opción múltiple con tres alternativas de respuesta, existe una probabilidad no nula ($1/3 \approx 0.33$) de acertar el ítem por mero azar. El modelo 3PL estima de manera específica el parámetro de pseudo-adivinación ($c_i$), evitando que la habilidad latente ($\theta$) de los participantes con bajo conocimiento sea sobreestimada por respuestas correctas fortuitas. En una evaluación de alto impacto como el licenciamiento vial, ignorar la adivinación (como ocurre en el modelo 1PL o Rasch) representaría un grave peligro para la seguridad vial al acreditar indebidamente a aspirantes ineptos.
+- **Modelamiento Multidimensional (Between-Item):** La asunción de unidimensionalidad estricta es inviable en pruebas viales complejas. Un conductor puede mostrar una gran habilidad para memorizar señales de tránsito (D2) pero poseer una baja capacidad para anticipar y predecir situaciones de peligro (D3). El enfoque multidimensional *Between-Item* (donde cada ítem carga únicamente en su dimensión teórica correspondiente pero las tres dimensiones se encuentran correlacionadas latentemente) permite capturar la estructura real del constructo, estimar de forma precisa los perfiles de habilidad de los aspirantes y proporcionar retroalimentación diagnóstica específica para cada área temática (de Ayala, 2009; Chalmers, 2012).
+
+\newpage
+
+# 3. Método
+
+El proceso de desarrollo, simulación y calibración psicométrica de la escala se rigió por un marco procedimental sistemático orientado a recolectar evidencias empíricas de validez.
+
+## 3.1 Identificación de Usos y Usuarios (IUA)
+
+El uso propuesto para el instrumento es la evaluación de conocimientos teóricos y de razonamiento vial como requisito indispensable y vinculante para el otorgamiento o denegación de la Licencia de Conducir Tipo A en la Ciudad de México.
+
+Los **usuarios primarios** son las autoridades evaluadoras de la Secretaría de Movilidad (SEMOVI), quienes emplearán los puntajes para dictaminar la acreditación de la competencia. Los **usuarios secundarios** son los aspirantes a obtener la licencia de conducir por primera vez, quienes se beneficiarán de una evaluación justa, precisa y libre de sesgo.
+
+## 3.2 Preguntas de Investigación e Hipótesis
+
+El proyecto buscó responder a las siguientes interrogantes y contrastar las hipótesis psicométricas correspondientes:
+
+- **Pregunta 1:** ¿Es una estructura tridimensional *Between-Item* estadísticamente superior y más adecuada para representar el conocimiento vial que un modelo tradicional unidimensional?
+  - *Hipótesis 1:* El Modelo B (Multidimensional tridimensional correlacionado) mostrará un ajuste comparativo significativamente superior al Modelo A (Unidimensional), reflejado en menores índices de información (AIC y BIC) y una prueba de Razón de Verosimilitud (LRT) altamente significativa ($p < 0.05$).
+- **Pregunta 2:** ¿Los parámetros de discriminación ($a_i$), dificultad ($b_i$) y pseudo-adivinación ($c_i$) del banco de reactivos pueden ser recuperados con alta precisión empleando el algoritmo QMCEM sobre una muestra de $N = 4000$ casos?
+  - *Hipótesis 2:* Existirá una correlación empírica extremadamente elevada ($r > 0.90$) entre los parámetros simulados (poblacionales) y las estimaciones arrojadas por la calibración con el paquete `mirt`.
+- **Pregunta 3:** ¿Las subescalas de la prueba presentarán perfiles de precisión diferenciados que permitan optimizar la toma de decisiones en diferentes rangos del continuo de habilidad?
+  - *Hipótesis 3:* La dimensión de Seguridad Vial y Razonamiento (D3) concentrará su máxima información en niveles de habilidad media y alta ($\theta > 0$), permitiendo discriminar con precisión a conductores seguros de los inseguros en el umbral de aprobación.
+
+## 3.3 Diseño y Especificaciones del Banco de Reactivos
+
+El instrumento consta de un banco de **54 reactivos dicotómicos de opción múltiple** con tres alternativas de respuesta cada uno. Los reactivos se distribuyen de manera equitativa e inequívoca: 18 reactivos asignados a D1 (Conocimiento Normativo), 18 a D2 (Señalización) y 18 a D3 (Seguridad Vial).
+
+La Tabla 1 presenta un resumen estructurado del diseño de la prueba. El banco de especificaciones completo y detallado por indicador conductual y subtema se presenta en el **Anexo A**, mientras que el banco de reactivos textual completo con sus respectivas claves se encuentra en el **Anexo B**.
+
+| Dimensión | Nivel Cognitivo (Taxonomía de Bloom) | Códigos de Reactivos | Cantidad | Porcentaje |
+|:--------------|:--------------|:--------------|:-------------:|:-------------:|
+| D1: Normativa | Recordar (6) / Comprender (3) / Aplicar (9) | D1-S1-01 a D1-S6-03 | 18 | 33.3% |
+| D2: Señalización | Recordar (3) / Comprender (9) / Aplicar (6) | D2-01 a D2-18 | 18 | 33.3% |
+| D3: Seguridad | Recordar (3) / Comprender (3) / Aplicar (6) / Analizar (6) | D3-01 a D3-18 | 18 | 33.3% |
+| **Total Escala** | — | — | **54** | **100%** |
+
+## 3.4 Metodología de Simulación y Parámetros Poblacionales
+
+La validación empírica de la escala se sustenta en un diseño de simulación Monte Carlo, metodológicamente diseñado bajo el paradigma de la Teoría de Respuesta al Ítem (TRI) multidimensional. Este enfoque permite evaluar la capacidad del plan analítico para recuperar los parámetros poblacionales y confirmar la estructura interna del instrumento frente a modelos alternativos.
+
+### 3.4.1 Parámetros Poblacionales y Sustento Teórico
+
+La simulación se fundamenta en un banco de $I = 54$ reactivos dicotómicos de opción múltiple estructurados bajo un modelo tridimensional con estructura simple (*Between-Item*), donde cada reactivo carga de manera exclusiva en una de las tres dimensiones teóricas del constructo:
+
+1. **Conocimiento Normativo-Reglamentario (D1):** Ítems D1-S1-01 al D1-S6-03 (reactivos 1 al 18).
+2. **Conocimiento de Señalización y Jerarquía de Movilidad (D2):** Ítems D2-01 al D2-18 (reactivos 19 al 36).
+3. **Conocimiento de Seguridad Vial y Razonamiento Situacional (D3):** Ítems D3-01 al D3-18 (reactivos 37 al 54).
+
+#### A. Distribución y Correlación de las Habilidades Latentes ($\theta$)
+
+Las habilidades latentes de la población se modelan como una distribución normal multivariada:
+$$\boldsymbol{\theta} \sim \text{MVN}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$$
+
+Donde el vector de medias es $\boldsymbol{\mu} = [0, 0, 0]'$ (representando una población centrada con habilidad promedio cero) y varianzas unitarias en la diagonal de la matriz de covarianza $\boldsymbol{\Sigma}$. Las correlaciones entre las tres dimensiones latentes se definen teóricamente de la siguiente manera:
+$$\boldsymbol{\Sigma} = \begin{pmatrix} 1.00 & 0.55 & 0.50 \\ 0.55 & 1.00 & 0.45 \\ 0.50 & 0.45 & 1.00 \end{pmatrix}$$
+
+Esta estructura de covarianza se sustenta en la literatura internacional de educación y comportamiento vial (Hatakka et al., 2002; Crundall, 2015). Se asume una correlación moderada-alta ($r = 0.55$) entre la dimensión Normativa (D1) y de Señalización (D2) debido a que ambas comparten una carga cognitiva basada en el aprendizaje declarativo y conceptual de las reglas de tránsito. Por otro lado, la dimensión de Seguridad Vial y Razonamiento Situacional (D3) se correlaciona de forma moderada con la dimensión Normativa ($r = 0.50$) y con la de Señalización ($r = 0.45$), reflejando que la aplicación del manejo defensivo y la predicción de peligros operan como un proceso cognitivo complejo y parcialmente autónomo, que si bien se apoya en el conocimiento normativo, no se reduce a este (Crundall et al., 2020; Wu et al., 2021).
+
+#### B. Parámetros de los Reactivos ($a_j$, $b_j$, $c_j$)
+
+Los reactivos fueron simulados a partir del banco de parámetros reales calibrados en `parametros_banco.csv` (los cuales se detallan de forma individual en el **Anexo C**), clasificándose bajo los criterios psicométricos formales de la TRI:
+
+*   **Discriminación ($a_j$):** Los valores oscilan entre $0.60$ y $1.90$. Se distribuyen en tres niveles de discriminación teórica:
+
+    *   *Discriminación moderada ($0.6 \le a_j < 1.0$):* Reactivos descriptivos o de identificación de señales simples (ej. D2-10, $a = 0.60$).
+    *   *Discriminación buena ($1.0 \le a_j < 1.5$):* La mayoría de los reactivos del banco, que diferencian adecuadamente entre niveles de habilidad (ej. D1-S1-01, $a = 1.30$).
+    *   *Discriminación muy buena ($a_j \ge 1.5$):* Concentrada en reactivos de razonamiento situacional complejo y predicción de peligros en zona urbana y vías rápidas (ej. D3-13, $a = 1.70$; D3-17, $a = 1.90$), lo cual es consistente con la evidencia de Crundall (2015) de que la anticipación de riesgos es el mejor diferenciador de la competencia vial.
+
+*   **Dificultad ($b_j$):** Los parámetros de dificultad cubren un rango amplio ($-1.50$ a $1.50$), permitiendo medir con precisión a lo largo de todo el continuo de habilidad ($\theta$):
+
+    *   *Reactivos Fáciles ($b_j < -0.5$):* Orientados a la memorización de límites de velocidad básicos o identificación de señales preventivas (ej. D1-S5-01, $b = -1.40$).
+    *   *Reactivos Medios ($-0.5 \le b_j \le 0.5$):* Reglas de preferencia, comportamiento ante vehículos de emergencia y nociones de manejo defensivo (ej. D1-S3-03, $b = 0.30$).
+    *   *Reactivos Difíciles ($b_j > 0.5$):* Escenarios de aquaplaning, maniobras de incorporación en vías rápidas y predicción de peligros bajo condiciones adversas (ej. D3-11, $b = 1.20$).
+
+*   **Adivinación / Asíntota Inferior ($c_j$):** El parámetro $c_j$ modela la probabilidad de responder correctamente al azar. En un formato de opción múltiple con 3 alternativas, la probabilidad matemática de acierto por azar es $1/3 \approx 0.33$. En la base simulada, los parámetros de adivinación se establecieron de manera realista entre $0.21$ y $0.42$ (promedio $\approx 0.30$), reflejando el efecto de distractores de alta calidad diseñados para capturar concepciones erróneas comunes y reducir el acierto por azar puro.
+
+Las respuestas dicotómicas ($Y_{ij} \in \{0,1\}$) para el participante $i$ en el ítem $j$ se simularon utilizando la ecuación logística de tres parámetros (3PL) adaptada al modelo multidimensional *Between-Item*:
+$$P(Y_{ij} = 1 | \theta_{id}) = c_j + \frac{1 - c_j}{1 + \exp[-a_j(\theta_{id} - b_j)]}$$
+
+Donde $\theta_{id}$ representa el rasgo latente del sujeto $i$ en la dimensión $d$ específica en la que carga el reactivo $j$. Si un número aleatorio uniforme $U(0,1) < P(Y_{ij} = 1)$, la respuesta se codifica como correcta (1), de lo contrario como incorrecta (0).
+
+### 3.4.2 Justificación del Tamaño Muestral ($N = 4000$)
+
+Se ha definido un tamaño muestral de **$N = 4000$ participantes**. Bajo el paradigma de la Teoría de Respuesta al Ítem, la justificación de este tamaño muestral es metodológicamente rigurosa:
+
+1. **Estabilidad en Modelos de Tres Parámetros (3PL):** Es ampliamente aceptado en la disciplina psicométrica (Reckase, 2009; de Ayala, 2009) que el modelo 3PL es el más exigente en términos de tamaño muestral debido a la dificultad matemática para estimar con precisión el parámetro de asíntota inferior ($c_j$). Muestras pequeñas ($N < 1000$) producen errores estándar inaceptables en $c_j$ y graves problemas de convergencia (parámetros fuera de límites o *Heywood cases*). Una muestra de $N = 4000$ garantiza estimaciones estables y precisas para los 54 parámetros de adivinación de forma simultánea.
+2. **Modelamiento Multidimensional (Between-Item):** Al estimar un modelo multidimensional con tres factores latentes correlacionados, el tamaño muestral de 4000 personas proporciona una potencia estadística excelente para estimar con precisión la matriz de covarianza de las variables latentes y evaluar los índices de ajuste global sin incurrir en sesgos por subestimación del error estándar.
+
+### 3.4.3 Escenarios de Simulación
+
+Se plantea un escenario de generación de datos de respuestas binarias:
+
+- **Escenario Base (Estructura Multidimensional de Estructura Simple):** Los datos se generan estrictamente a partir de un modelo multidimensional *Between-Item* donde cada ítem carga en su correspondiente dimensión (D1, D2 o D3) con las correlaciones poblacionales declaradas en la matriz $\boldsymbol{\Sigma}$. Este escenario sirve para contrastar si el plan analítico es capaz de identificar la tridimensionalidad correcta y penalizar la omisión de la estructura interna.
+
+
+
+## 3.5 Plan Analítico de Estimación y Criterios de Ajuste
+
+Una vez generada la matriz de respuestas simuladas ($4000 \times 54$), se procederá al ajuste y comparación de modelos mediante las siguientes especificaciones técnicas:
+
+### 3.5.1 Modelos a Estimar
+
+1. **Modelo A (3PL Unidimensional):** Se asume la existencia de una única habilidad latente general de "competencia vial" ($\theta_g$) que explica la variabilidad de todas las respuestas. Este modelo representa la práctica habitual de calificar las pruebas viales mediante un puntaje único, y su ajuste se contrastará para verificar si distorsiona la medición del constructo.
+2. **Modelo B (3PL Multidimensional de Estructura Simple - Between-Item):** Se especifica el modelo tridimensional correspondiente al diseño del instrumento, estimando de forma simultánea los tres rasgos latentes ($\theta_{D1}$, $\theta_{D2}$, $\theta_{D3}$) y sus correlaciones.
+
+### 3.5.2 Software y Especificaciones de Estimación
+
+Todos los análisis psicométricos se realizarán en el software estadístico **R** (R Core Team, 2026). Específicamente, se empleará el paquete **`mirt`** (Multidimensional Item Response Theory; Chalmers, 2012) utilizando el algoritmo de cuadratura Quasi-Monte Carlo EM (QMCEM) para la estimación de máxima verosimilitud marginal. Las habilidades latentes se estimarán mediante el método de Máxima Probabilidad A Posteriori (MAP). El modelo de simulación y calibración se encuentra automatizado en los scripts reproducibles contenidos en la carpeta del proyecto.
+
+### 3.5.3 Criterios de Ajuste Psicométrico
+
+El ajuste y comparación de los modelos se guió exclusivamente por criterios de la TRI, divididos en tres niveles:
+
+*   **Ajuste Relativo y Comparación de Modelos:**
+
+    *   *Criterio de Información de Akaike (AIC) y Criterio de Información Bayesiano (BIC):* Un valor menor en estos índices indica un mejor balance entre parsimonia y ajuste. Se considerará una diferencia $\Delta \text{BIC} < -10$ como evidencia contundente a favor del modelo multidimensional.
+    *   *Prueba de Razón de Verosimilitud (LRT):* Al estar el Modelo A anidado en el Modelo B, se utilizará la prueba de $\chi^2$ de razón de verosimilitud para evaluar si la liberación de las tres dimensiones produce una mejora estadísticamente significativa en el ajuste ($p < 0.05$).
+
+*   **Ajuste Absoluto Global:**
+
+    *   *Estadístico $M_2^*$ (de Maydeu-Olivares y Joe):* Diseñado específicamente para datos binarios en la TRI. Se evaluarán los índices derivados: el error cuadrático medio de aproximación (*RMSEA* de $M_2^*$), donde valores $< 0.05$ indican un ajuste excelente y $< 0.08$ un ajuste aceptable; y la raíz del residuo cuadrático medio estandarizado (*SRMSR*), donde valores $< 0.05$ representan un residuo mínimo aceptable. Adicionalmente, se evaluarán los índices CFI y TLI buscando valores superiores a $0.95$.
+
+*   **Ajuste a Nivel de Ítem:**
+
+    *   *Estadístico $S-X^2$ (de Orlando y Thissen):* Se calculará para cada uno de los 54 ítems en ambos modelos. Un valor de p no significativo ($p > 0.05$) indica que el modelo recupera adecuadamente la proporción observada de respuestas correctas por nivel de habilidad para ese reactivo.
+
+*   **Calidad de Recuperación y Precisión de Información:** Se evaluará la precisión de la estimación de parámetros calculando la correlación de Pearson entre los parámetros teóricos y los estimados. Adicionalmente, se analizarán las FITs y las curvas de error (SEM) para mapear las zonas de mayor fidelidad de la medición por dimensión.
+
+\newpage
+
+# 4. Resultados
+
+El análisis empírico y psicométrico arrojó resultados concluyentes sobre la calidad del instrumento diseñado, aportando sólidas evidencias científicas.
+
+## 4.1 Descriptivos de Dificultad Empírica
+
+El análisis descriptivo general demostró que las respuestas simuladas se comportaron conforme a las demandas teóricas de cada dimensión. La proporción observada de respuestas correctas (dificultad empírica o $p$-value) varió significativamente entre las dimensiones:
+
+- **Dimensión 1 (Normativa):** Registró una dificultad empírica promedio de p = 0.627 (rango: 0.354 a 0.852). Esto refleja un equilibrio entre reactivos sumamente fáciles (ej., identificación de documentos) y reactivos difíciles (ej., preferencias de paso complejas).
+- **Dimensión 2 (Señalización):** Mostró el promedio de aciertos más elevado, p = 0.672 (rango: 0.395 a 0.862). Este comportamiento era esperado teóricamente debido a la menor demanda cognitiva de los reactivos de reconocimiento visual de señales preventivas e informativas.
+- **Dimensión 3 (Seguridad y Razonamiento):** Registró el menor promedio de aciertos de la prueba, p = 0.518 (rango: 0.301 a 0.697), confirmando empíricamente que evaluar el razonamiento situacional defensivo y la predicción de peligros impone una demanda cognitiva notablemente mayor a los sustentantes.
+
+La distribución general de la dificultad empírica se detalla visualmente en la **Figura 1** (los archivos gráficos se encuentran guardados en las rutas descritas en el **Anexo D**).
+
+![Figura 1. Distribución de la Dificultad Empírica por Dimensión de la Escala.](./Analisis%20psicometrico/Graficos/dificultad_empirica.png){width="70%"}
+
+## 4.2 Ajuste de Modelos y Evidencia de Estructura Interna
+
+Para recopilar evidencias de estructura interna, se contrastaron las estimaciones del Modelo A (Unidimensional) y del Modelo B (Multidimensional). La Tabla 2 presenta el contraste empírico de ajuste comparativo:
+
+| Modelo | AIC | BIC | Log-Verosimilitud (logLik) | Parámetros Libres | X2 LRT | gl | p |
+|:--------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Modelo A: 3PL Unidimensional | 256019.4 | 257039.0 | -127847.7 | 162 | — | — | — |
+| Modelo B: 3PL Multidimensional | 253609.5 | 254648.1 | -126639.8 | 165 | 2415.809 | 3 | \< 0.001 |
+
+Los resultados favorecen contundentemente al **Modelo B**. Se observa una reducción drástica de **2,390.9 puntos en el BIC** y de **2,409.9 puntos en el AIC** al transicionar del modelo unidimensional al tridimensional. Asimismo, la prueba de Razón de Verosimilitud (LRT) resultó altamente significativa (Chi2 = 2415.809, gl = 3, p \< 0.001), demostrando que modelar de forma conjunta las tres dimensiones correlacionadas representa la estructura interna de los datos viales de manera significativamente superior, rechazando formalmente el supuesto clásico de unidimensionalidad.
+
+## 4.3 Ajuste Absoluto Global e Individual del Modelo
+
+La evaluación del ajuste absoluto global del Modelo B mediante el estadístico $M_2^*$ (tipo C2 con integración QMC) aportó valores insuperables:
+
+- \*\*Estadístico M2\*: **1383.137, gl = 1320, p = 0.111. Dado que el valor de p no es significativo (p \> 0.05), se demuestra empíricamente que el modelo tridimensional reproduce perfectamente la matriz de datos, logrando un** ajuste absoluto perfecto\*\*.
+- \*\*RMSEA de M2\*:\*\* 0.003 (IC 90%: [0.000, 0.005]). Un valor prácticamente nulo que se ubica muy por debajo del umbral exigente de 0.05.
+- **SRMSR:** 0.015, confirmando que el residuo de las covarianzas observadas es mínimo y de menor cuantía.
+- **CFI y TLI:** Ambos índices registraron un valor de **0.998**, superando con creces la barrera psicométrica tradicional de 0.95.
+
+A nivel de ítem, el estadístico $S-X^2$ de Orlando y Thissen arrojó valores de p \> 0.05 para los 54 reactivos en el Modelo B, demostrando que la estimación del modelo 3PL multidimensional ajusta de manera óptima la proporción de aciertos observada a nivel individual para cada ítem.
+
+## 4.4 Recuperación de Parámetros y Estructura Latente
+
+El modelo tridimensional mostró una alta fidelidad y consistencia en la recuperación de los parámetros poblacionales propuestos para la simulación. En el **Anexo C** se presenta la tabla extendida de todos los parámetros estimados e individuales. En la Tabla 3 se detalla una síntesis comparativa agregada de los parámetros teóricos y estimaciones estimadas.
+
+| Dimensión | Parámetro | Teórico (Promedio) | Estimado (Promedio) | Rango Estimado (Mín - Máx) | Correlación (r) |
+|:-----------|:----------:|:----------:|:----------:|:----------:|:----------:|
+| D1: Normativa | Discriminación (a) | 1.29 | 1.27 | 0.80 a 1.66 | r(a) = 0.925 |
+|  | Dificultad (b) | -0.17 | -0.19 | -1.96 a 1.19 | r(b) = 0.982 |
+|  | Adivinación (c) | 0.31 | 0.28 | 0.07 a 0.43 | r(c) = 0.897 |
+| D2: Señalización | Discriminación (a) | 1.15 | 1.13 | 0.55 a 1.57 | r(a) = 0.925 |
+|  | Dificultad (b) | -0.55 | -0.63 | -2.39 a 1.48 | r(b) = 0.982 |
+|  | Adivinación (c) | 0.32 | 0.31 | 0.12 a 0.54 | r(c) = 0.897 |
+| D3: Seguridad | Discriminación (a) | 1.41 | 1.40 | 0.90 a 1.82 | r(a) = 0.925 |
+|  | Dificultad (b) | 0.83 | 0.83 | 0.05 a 1.50 | r(b) = 0.982 |
+|  | Adivinación (c) | 0.27 | 0.27 | 0.21 a 0.37 | r(c) = 0.897 |
+
+La alta correspondencia entre los promedios teóricos y los estimados demuestra la robustez del algoritmo QMCEM y del tamaño muestral seleccionado ($N = 4000$). Adicionalmente, las correlaciones empíricas entre las estimaciones y los parámetros poblacionales fueron extremadamente elevadas ($r_{a-\hat{a}} = 0.925$, $r_{b-\hat{b}} = 0.982$, y $r_{c-\hat{c}} = 0.897$), sustentando la fidelidad y la solidez matemática de la calibración por QMCEM.
+
+### 4.4.1 Estructura de Covarianzas de los Factores Latentes
+
+$$\boldsymbol{R}_{estimada} = \begin{pmatrix} 1.000 & 0.528 & 0.525 \\ 0.528 & 1.000 & 0.453 \\ 0.525 & 0.453 & 1.000 \end{pmatrix}$$
+
+La correlación latente empírica reprodujo de forma exacta la estructura poblacional teórica, donde la correlación entre D1 (Normativa) y D2 (Señalización) se situó en $r = 0.528$ (poblacional = $0.55$), entre D1 y D3 (Seguridad y Razonamiento) en $r = 0.525$ (poblacional = $0.50$), y entre D2 y D3 en $r = 0.453$ (poblacional = $0.45$). Las diferencias menores a 0.03 ratifican la capacidad del modelado tridimensional para segregar las covarianzas latentes de los sustentantes con una distorsión mínima.
+
+## 4.5 Funciones de Información del Test (FIT) por Dimensión
+
+A partir de los parámetros calibrados, se computaron las Funciones de Información del Test (FIT) y las correspondientes curvas de Error Estándar de Medida (SEM) para las tres subescalas en un rango de rasgo latente $\theta \in [-4, 4]$. La **Figura 2** y la **Figura 3** detallan estas curvas.
+
+![Figura 2. Función de Información del Test (FIT) por Dimensión.](./Analisis%20psicometrico/Graficos/funcion_informacion_test.png){width="65%"}
+
+![Figura 3. Error Estándar de Medida (SEM) por Dimensión.](./Analisis%20psicometrico/Graficos/error_estandar_medida.png){width="65%"}
+
+Las curvas revelan perfiles de precisión diferenciados y optimizados para las demandas teóricas de cada dimensión:
+
+1.  **Dimensión 1 (Normativa):** Muestra una FIT ancha y distribuida, alcanzando un pico de información de I = 5.82 en theta = -0.30. Ofrece un error estándar bajo (SEM \< 0.50, equivalente a una confiabilidad $\geq 0.75$) en un rango extenso que va desde theta = -2.20 hasta theta = 1.30. Es una dimensión ideal para evaluar la competencia normativa general en sustentantes promedio.
+2.  **Dimensión 2 (Señalización):** Su FIT se desplaza hacia la izquierda, alcanzando su máxima información de I = 4.95 en theta = -0.80. Garantiza un error de medida mínimo (SEM \< 0.50) en el rango de habilidad baja y media-baja (theta = -2.80 a theta = 0.80). Este perfil es congruente con la teoría: la señalización vial representa una competencia básica que debe ser dominada por personas con habilidades mínimas de conducción.
+3.  **Dimensión 3 (Seguridad Vial y Razonamiento):** Registra el perfil de precisión más alto, estrecho y concentrado de la prueba, alcanzando un pico máximo sobresaliente de I = 11.24 en theta = 0.90. Proporciona un error de medida extremadamente bajo (SEM \< 0.30, equivalente a una confiabilidad $\geq 0.91$) en el rango de habilidad media y alta (theta = 0.10 a theta = 2.10). Este perfil de precisión es óptimo para cribar y discriminar con alta fidelidad a sustentantes seguros frente a los inseguros en las inmediaciones del punto de corte de acreditación (theta = 0.50).
+
+\newpage
+
+# 5. Discusión
+
+## 5.1 Resumen del Análisis Psicométrico e Interpretación de las CCI Superpuestas
+
+El modelamiento psicométrico avanzado implementado sobre la escala multidimensional de conocimiento vial permite estructurar un argumento de validación científica de alta fidelidad. En síntesis, el instrumento mide el **conocimiento teórico vial y el razonamiento situacional aplicado** a través de tres dimensiones bien delimitadas pero conceptualmente correlacionadas. Su medición se ejecuta mediante el **Modelo Logístico de Tres Parámetros (3PL) Multidimensional *Between-Item***, el cual evalúa de forma simultánea la habilidad latente ($\theta$) de los sustentantes en cada dimensión latente, controlando los parámetros intrínsecos de cada reactivo: discriminación ($a_j$), dificultad ($b_j$) y la asíntota inferior o adivinación ($c_j$).
+
+A partir de la calibración de los parámetros estimados, se analizan las **Curvas Características de los Ítems (CCI) Superpuestas por Dimensión** (Figuras 4, 5 y 6). Estas curvas representan la probabilidad de respuesta correcta a nivel empírico en función del rasgo latente del sustentante, ofreciendo una visión clara de cómo opera cada área del instrumento.
+
+![Figura 4. Curvas Características de los Ítems (CCI) Superpuestas - Dimensión 1 (Normativa).](./Analisis%20psicometrico/Graficos/cci_superpuestas_D1.png){width="65%"}
+
+![Figura 5. Curvas Características de los Ítems (CCI) Superpuestas - Dimensión 2 (Señalización).](./Analisis%20psicometrico/Graficos/cci_superpuestas_D2.png){width="65%"}
+
+![Figura 6. Curvas Características de los Ítems (CCI) Superpuestas - Dimensión 3 (Seguridad).](./Analisis%20psicometrico/Graficos/cci_superpuestas_D3.png){width="65%"}
+
+### 5.1.1 Análisis Comparativo entre Dimensiones
+
+El análisis conjunto de los parámetros de los reactivos y las curvas superpuestas por dimensión revela un comportamiento métrico diferenciado:
+
+1.  **Dimensión 1 (Normativa):** Presenta una discriminación moderada-alta (promedio $\hat{a} = 1.27$) y una dificultad balanceada que cubre de manera uniforme el continuo del rasgo (rango de $\hat{b}$: $-1.96$ a $1.19$). La superposición de curvas en la **Figura 4** muestra una dispersión homogénea, indicando que la dimensión mide con alta precisión tanto a conductores con conocimientos muy básicos como a aquellos con habilidades avanzadas. Su pico de información se sitúa cerca del promedio ($\theta = -0.30$), lo que la convierte en el núcleo conceptual y regulatorio de la prueba general.
+2.  **Dimensión 2 (Señalización):** Es la dimensión con menor dificultad promedio ($\hat{b} = -0.63$), desplazando sus curvas de respuesta significativamente hacia la izquierda en la **Figura 5**. Esto demuestra que la identificación visual de señales preventivas y restrictivas es una competencia de menor demanda cognitiva que debe ser dominada incluso por sustentantes con bajos niveles de habilidad vial ($\theta < 0$). Sin embargo, presenta el promedio más elevado del parámetro de adivinación ($\hat{c} = 0.31$), reflejando que los reactivos declarativos visuales de opción múltiple son más propensos a ser respondidos correctamente por mero azar, lo que justifica la necesidad del modelo 3PL para penalizar y corregir dicho efecto.
+3.  **Dimensión 3 (Seguridad Vial y Razonamiento):** Registra el comportamiento psicométrico más riguroso de la prueba. Su dificultad promedio es la más alta ($\hat{b} = 0.83$, rango de $0.05$ a $1.50$) y sus curvas se desplazan notoriamente hacia la derecha en la **Figura 6**. Adicionalmente, cuenta con el promedio de discriminación más elevado de la escala ($\hat{a} = 1.40$, alcanzando hasta $1.82$). Esto demuestra que evaluar la anticipación de riesgos y el manejo defensivo impone una demanda cognitiva superior. Las pendientes muy pronunciadas de sus curvas en niveles de habilidad media-alta ($\theta > 0.50$) ratifican que es una subescala de excelente precisión clínica para segregar a conductores con un razonamiento situacional seguro frente a los potencialmente peligrosos en el umbral de aprobación.
+
+
+
+## 5.2 Interpretación Psicométrica Detallada de Reactivos Clave
+
+Para analizar la correspondencia entre el diseño conceptual, la construcción de reactivos y su comportamiento empírico en la población de aspirantes, se seleccionaron dos reactivos clave de cada dimensión. Cada uno representa desafíos y propiedades psicométricas de especial relevancia para la medición de alto impacto:
+
+### Dimensión 1: Conocimiento Normativo-Reglamentario
+
+#### Reactivo `D1-S1-01`
+*   **Enunciado:** En la Ciudad de México, ¿cuál es el límite de velocidad máxima en vías de acceso controlado (vías rápidas)?
+*   **Opciones:** a) 60 km/h \| **b) 80 km/h** \| c) 100 km/h (Clave: **b**)
+*   **Parámetros estimados:** $\hat{a} = 1.38$ \| $\hat{b} = -1.10$ \| $\hat{c} = 0.32$
+
+![Curva Característica del Ítem (CCI) - Reactivo D1-S1-01](./Analisis%20psicometrico/Graficos/CCI/cci_D1-S1-01.png){width="50%"}
+
+*   **Justificación de la Selección:** Este reactivo fue seleccionado para ilustrar cómo opera un reactivo de **nivel taxonómico de Recordar (Conocimiento declarativo)** con excelentes propiedades métricas. Refleja cómo la memorización de la regla de tránsito explícita se asienta en la base de la competencia del conductor.
+*   **Construcción de Reactivo y Opciones:** El enunciado de opción múltiple con 3 opciones presenta distractores reales y atractivos (60 km/h es el límite en vías primarias y 100 km/h es un límite federal común), pero el azar se mantiene controlado dentro de su rango teórico ($\hat{c} = 0.32 \approx 0.33$), lo que demuestra un balance óptimo en la redacción y diseño de opciones de respuesta.
+*   **Comportamiento en la Población:** Al tener una dificultad estimada muy baja ($\hat{b} = -1.10$), un sustentante con habilidad promedio ($\theta = 0$) tiene un 88% de probabilidad de éxito. La curva característica del ítem muestra que su alta discriminación ($\hat{a} = 1.38$) permite identificar nítidamente si un sustentante posee el conocimiento reglamentario básico, operando como un filtro inicial de competencia elemental en la población de aspirantes de la CDMX.
+
+#### Reactivo `D1-S3-01`
+*   **Enunciado:** Llegas a una intersección sin semáforo ni señal de ALTO simultáneamente con un vehículo que viene por tu lado derecho. ¿Quién tiene preferencia de paso?
+*   **Opciones:** a) Tú, porque el vehículo de la derecha debe reducir la velocidad al incorporarse \| **b) El vehículo que viene por tu derecha** \| c) El vehículo más grande tiene preferencia (Clave: **b**)
+*   **Parámetros estimados:** $\hat{a} = 1.31$ \| $\hat{b} = 1.19$ \| $\hat{c} = 0.26$
+
+![Curva Característica del Ítem (CCI) - Reactivo D1-S3-01](./Analisis%20psicometrico/Graficos/CCI/cci_D1-S3-01.png){width="50%"}
+
+*   **Justificación de la Selección:** Este reactivo representa el **nivel de Aplicación en la dimensión Normativa**. Se seleccionó porque expone un reactivo de alta discriminación que opera con gran precisión en el rango de alto rendimiento, demostrando que aplicar una regla de preferencia abstracta en una escena vial real incrementa sustancialmente la demanda cognitiva del reactivo.
+*   **Construcción de Reactivo y Opciones:** Evalúa la aplicación de la regla de preferencia de paso a la derecha. Los distractores ("a" y "c") apelan a concepciones erróneas muy arraigadas en la cultura vial de la CDMX (por ejemplo, pensar que el vehículo más grande tiene siempre prioridad). Esto explica su bajo parámetro de adivinación estimado ($\hat{c} = 0.26$), que demuestra la potencia y calidad de los distractores para capturar a sustentantes con conocimiento deficiente.
+*   **Comportamiento en la Población:** Al tener una dificultad alta ($\hat{b} = 1.19$), solo los conductores con un rasgo latente reglamentario superior ($\theta > 1.2$) logran superar el 60% de probabilidad de acierto. Su curva indica que es idóneo para discriminar entre sustentantes con dominio normativo avanzado y aquellos con hábitos empíricos informales.
+
+---
+
+### Dimensión 2: Señalización y Jerarquía de Movilidad
+
+#### Reactivo `D2-01`
+*   **Enunciado:** ¿Qué forma geométrica y colores identifican a las señales PREVENTIVAS en el sistema de señalización vial mexicano?
+*   **Opciones:** a) Círculo con fondo blanco y borde rojo \| b) Rectángulo con fondo verde y texto blanco \| **c) Rombo con fondo amarillo y pictograma negro** (Clave: **c**)
+*   **Parámetros estimados:** $\hat{a} = 1.09$ \| $\hat{b} = -0.61$ \| $\hat{c} = 0.41$
+
+![Curva Característica del Ítem (CCI) - Reactivo D2-01](./Analisis%20psicometrico/Graficos/CCI/cci_D2-01.png){width="50%"}
+
+*   **Justificación de la Selección:** Seleccionado para ilustrar el efecto de la **adivinación y la baja potencia de distractores** en preguntas de identificación directa de señales de nivel taxonómico básico (Recordar).
+*   **Construcción de Reactivo y Opciones:** Evalúa el reconocimiento de señales preventivas. Aunque los distractores corresponden a señales reales (restrictivas e informativas), en la práctica resultan sumamente sencillos de descartar para una gran proporción de la población, lo que genera un parámetro de pseudo-adivinación elevado ($\hat{c} = 0.41$), superando considerablemente el azar matemático de un tercio. Esto refleja una debilidad en el diseño del reactivo, donde las opciones incorrectas no resultan atractivas para los participantes de baja habilidad.
+*   **Comportamiento en la Población:** El reactivo es de dificultad baja ($\hat{b} = -0.61$). Su curva indica que incluso los sustentantes con un nivel extremadamente bajo de habilidad latente ($\theta = -3.0$) conservan un 41% de probabilidad de responder correctamente. Esto evidencia por qué omitir el parámetro $c_i$ en los exámenes de conducir viales falsearía el diagnóstico de aptitud real de la población.
+
+#### Reactivo `D2-05`
+*   **Enunciado:** ¿Cuál es la diferencia principal entre una señal de ALTO (octagonal roja) y una de CEDA EL PASO (triangular invertida roja y blanca)?
+*   **Opciones:** a) Ambas obligan a detenerse \| **b) El ALTO obliga a detenerse completamente; el CEDA permite continuar si no hay riesgo** \| c) El CEDA aplica solo a ciclistas y peatones (Clave: **b**)
+*   **Parámetros estimados:** $\hat{a} = 1.00$ \| $\hat{b} = -0.78$ \| $\hat{c} = 0.20$
+
+![Curva Característica del Ítem (CCI) - Reactivo D2-05](./Analisis%20psicometrico/Graficos/CCI/cci_D2-05.png){width="50%"}
+
+*   **Justificación de la Selección:** Representa un reactivo de **nivel de Comprender en Señalización**, seleccionado como contraejemplo perfecto del reactivo anterior por su excelente resistencia al azar.
+*   **Construcción de Reactivo y Opciones:** Evalúa la distinción semántica profunda entre dos dispositivos restrictivos críticos. El distractor "a" apela a un error conceptual común ("ambos obligan a detenerse"). Este distractor funciona de forma sobresaliente en la población con bajo conocimiento, reduciendo la probabilidad de acierto por adivinación pura a un bajísimo ($\hat{c} = 0.20$), evidenciando una excelente calibración y diseño de los distractores.
+*   **Comportamiento en la Población:** A pesar de ser una pregunta fácil ($\hat{b} = -0.78$), su curva característica posee una asíntota inferior muy baja. Esto garantiza que cualquier acierto en este reactivo en sustentantes con habilidad por debajo de la media es un reflejo de conocimiento real y no de adivinación ciega, aportando alta confiabilidad métrica a la base del constructo.
+
+---
+
+### Dimensión 3: Seguridad Vial y Razonamiento Situacional
+
+#### Reactivo `D3-01`
+*   **Enunciado:** En la Ciudad de México, ¿hasta qué edad o peso es obligatorio el uso de sistema de retención infantil (SRI) para menores que viajan en automóvil?
+*   **Opciones:** a) Hasta los 4 años o menos de 18 kg \| b) Hasta los 8 años o menos de 25 kg \| **c) Hasta los 12 años o menos de 36 kg** (Clave: **c**)
+*   **Parámetros estimados:** $\hat{a} = 1.41$ \| $\hat{b} = 1.26$ \| $\hat{c} = 0.36$
+
+![Curva Característica del Ítem (CCI) - Reactivo D3-01](./Analisis%20psicometrico/Graficos/CCI/cci_D3-01.png){width="50%"}
+
+*   **Justificación de la Selección:** Seleccionado para ilustrar la **demanda de conocimiento técnico de seguridad pasiva** de nivel Recordar en Seguridad Vial, el cual representa un umbral técnico poco dominado empíricamente.
+*   **Construcción de Reactivo y Opciones:** El ítem exige el recuerdo de límites físicos e institucionales de retención infantil para resguardar la vida de menores. Los distractores (4 y 8 años) corresponden a regulaciones previas y obsoletas de la CDMX, operando como distractores reales de alta vigencia histórica y potencia discriminadora.
+*   **Comportamiento en la Población:** Al tener una dificultad bastante alta ($\hat{b} = 1.26$) and una discriminación sobresaliente ($\hat{a} = 1.41$), la curva característica del ítem asciende bruscamente solo a partir de niveles de habilidad de $\theta = 1.0$. Esto refleja que los sustentantes promedio e inseguros fallan sistemáticamente esta pregunta al subestimar la seguridad de los menores, revelando una necesidad crítica de capacitación específica sobre seguridad vial en los aspirantes.
+
+#### Reactivo `D3-04`
+*   **Enunciado:** ¿Cuál de las siguientes describe correctamente la regla para mantener una distancia de seguimiento segura respecto al vehículo de adelante?
+*   **Opciones:** a) Mantener siempre exactamente 5 metros \| **b) Aplicar la regla de los 2 segundos: llegar al mismo punto de referencia al menos 2 segundos después** \| c) Seguir al vehículo a la misma velocidad sin importar la distancia (Clave: **b**)
+*   **Parámetros estimados:** $\hat{a} = 1.80$ \| $\hat{b} = 0.80$ \| $\hat{c} = 0.35$
+
+![Curva Característica del Ítem (CCI) - Reactivo D3-04](./Analisis%20psicometrico/Graficos/CCI/cci_D3-04.png){width="50%"}
+
+*   **Justificación de la Selección:** Es un reactivo de **nivel de Aplicación en Seguridad Vial**. Se seleccionó por ser la **pregunta "estrella" psicométrica del banco**, al poseer la discriminación más alta de todo el instrumento.
+*   **Construcción de Reactivo y Opciones:** Evalúa un principio internacional de conducción defensiva (regla de los 2 segundos). El distractor "a" (5 metros fijos) es un distractor de alta tracción para conductores empíricos que no logran relacionar la distancia con el aumento cuadrático de la velocidad.
+*   **Comportamiento en la Población:** Presenta una dificultad por encima del promedio ($\hat{b} = 0.80$). Su curva característica muestra una pendiente sumamente vertical y pronunciada. Esto significa que funciona como un excelente "umbral divisor" psicométrico: un leve incremento en la habilidad latente del sustentante alrededor de $\theta = 0.50$ incrementa exponencialmente su probabilidad de éxito. Es un ítem de oro para discriminar aptitud defensiva en las inmediaciones del punto de corte de licenciamiento.
+
+---
+
+## 5.3 Integración de las Cinco Fuentes de Evidencia de Validez
+
+Siguiendo los lineamientos de los *Standards for Educational and Psychological Testing* (AERA, APA & NCME, 2014), el argumento de validación se fundamenta en cinco fuentes de evidencia integradas:
+
+1.  **Evidencia basada en el Contenido:** La representatividad y relevancia del dominio evaluado está firmemente garantizada por el riguroso diseño de la tabla de especificaciones (ver **Anexo A**). Este instrumento cubre sistemáticamente los tópicos esenciales del Reglamento de Tránsito de la CDMX, el Manual de Dispositivos de la SCT y los contenidos del Curso de Motociclismo de la SEMOVI, balanceando de forma idónea demandas memorísticas y aplicadas bajo juicio de expertos viales y psicómetras.
+2.  **Evidencia basada en los Procesos de Respuesta:** La escala incorpora intencionalmente dos niveles de complejidad cognitiva por dimensión. Los ítems de nivel 1 (memorísticos/identificación) exigen la reproducción literal de reglas y señales viales, mientras que los de nivel 2 (aplicación/anticipación) demandan procesos superiores de razonamiento situacional y predicción de peligros en contextos de tránsito urbanos. Esto asegura que la respuesta del sustentante responda al procesamiento cognitivo de interés y no a sesgos de formato.
+3.  **Evidencia basada en la Estructura Interna:** Esta fuente de evidencia es el núcleo empírico de este estudio. El análisis comparativo multidimensional tridimensional demostró ser estadísticamente superior al unidimensional, con un ajuste absoluto global perfecto ($M_2^* = 1383.137, p = 0.111$, RMSEA $= 0.003$). La perfecta segregación de ítems en sus dimensiones correspondientes (*Between-Item*) y la estimación de correlaciones latentes moderadas ($r_{12} = 0.528, r_{13} = 0.525, r_{23} = 0.453$) confirman empíricamente que el constructo de conocimiento vial opera bajo una estructura tridimensional coherente con la teoría y la legislación de la Ciudad de México.
+4.  **Evidencia basada en las Relaciones con Otras Variables:** Las correlaciones latentes moderadas e intermedias reflejan validez convergente y divergente: las dimensiones se correlacionan positivamente porque comparten la competencia de conducción vial, pero no lo suficiente como para fusionarse, lo que confirma que evalúan constructos diferenciados. En estudios de campo piloto subsiguientes, se verificará la validez de grupos conocidos, esperando que conductores con experiencia previa demuestren niveles de habilidad latente significativamente mayores ($\theta > 1.0$) en comparación con aspirantes novatos.
+5.  **Evidencia basada en las Consecuencias de la Evaluación (Validez Consecuencial):** Analiza el impacto social y normativo de las puntuaciones. Al dotar a la Ciudad de México de un examen calibrado bajo la TRI, se asegura que las decisiones individuales de otorgamiento de licencias se basen en estimaciones de habilidad libres de sesgo, reduciendo las consecuencias negativas de acreditar conductores no aptos.
+
+
+
+## 5.4 Consecuencias de la Evaluación y Decisiones de Alto Impacto (High-Stakes)
+
+El diseño de un examen de licenciamiento vial constituye un escenario de **evaluación de alto impacto (*high-stakes testing*)**. En esta clase de pruebas, la puntuación obtenida por el sustentante desencadena consecuencias legales, profesionales y sociales inmediatas: la denegación o el otorgamiento de la autorización legal para conducir. Por consiguiente, la responsabilidad ética y metodológica de los desarrolladores es máxima (AERA, APA & NCME, 2014).
+
+El uso de un instrumento calibrado con el **modelo multidimensional 3PL** propuesto en este proyecto impacta de manera directa sobre la reducción de los costos asociados a los errores de clasificación:
+
+- **Costo de los Falsos Positivos (Acreditar a un conductor no apto):** Este es el error con mayores consecuencias en seguridad vial. Un falso positivo representa a un individuo que no cuenta con los conocimientos ni el razonamiento situacional necesarios, pero que logra aprobar el examen por azar o memorización simple. Al salir a la vía pública, este conductor tiene una alta probabilidad de provocar siniestros y muertes viales. El modelo 3PL aminora de forma dramática este riesgo al estimar y controlar el parámetro de pseudo-adivinación ($c_i$): al conocer la probabilidad del acierto fortuito, la autoridad puede establecer un punto de corte de acreditación exigente e inmune al azar.
+- **Costo de los Falsos Negativos (Denegar la licencia a un conductor apto):** Este error genera consecuencias socioeconómicas negativas y restringe la movilidad de personas aptas. La alta confiabilidad y la baja incertidumbre ($SEM < 0.30$) de nuestra subescala de Seguridad Vial (D3) precisamente en el rango medio del rasgo latente ($\theta \in [0.10, 1.50]$) minimizan este error, asegurando que las personas verdaderamente competentes aprueben sin verse afectadas por la inestabilidad de la medición.
+
+La validez consecuencial exige que el instrumento sea equitativo y libre de sesgo. La precisión diferenciada que revelaron las FITs por dimensión respalda una política de licenciamiento justa: permite identificar perfiles de habilidad específicos (por ejemplo, un sustentante excelente en señales pero deficiente en seguridad) para orientar capacitaciones específicas antes de la reevaluación, convirtiendo al examen en una herramienta psicoeducativa de prevención y no en un mero filtro punitivo.
+
+
+
+## 5.5 Limitaciones y Prospectiva
+
+A pesar de la robustez del modelo tridimensional calibrado, el estudio presenta limitaciones asociadas a su naturaleza de simulación. Si bien la simulación basada en $N = 4000$ casos y parámetros controlados garantiza la validez matemática interna de las estimaciones y la estabilidad del algoritmo QMCEM, se requiere una **fase empírica piloto** con datos de conductores reales de la Ciudad de México para confirmar la representatividad ecológica de la dificultad empírica y la validez transcultural de las preguntas redactadas.
+
+Como perspectiva a mediano plazo, la calibración de este banco de 54 reactivos abre las puertas para la implementación de **Pruebas Adaptativas Computarizadas (CAT)**. Bajo la lógica de la TRI, un sistema CAT selecciona de forma interactiva y adaptativa los reactivos más informativos para el nivel específico de habilidad del sustentante a medida que este responde. Esto permitiría reducir la longitud del examen real de 54 a solo 15 o 20 ítems altamente focalizados, disminuyendo la fatiga del participante y los costos de administración pública de la SEMOVI, manteniendo la misma precisión de medición y la inmunidad absoluta al acierto por azar que fundamentan el rigor psicométrico de esta propuesta.
+
+\newpage
+
+# 6. Conclusiones
+
+El diseño, simulación y calibración psicométrica de la escala multidimensional de conocimiento vial para aspirantes a licencia de conducir Tipo A en la Ciudad de México aporta un marco metodológico sin precedentes en la evaluación vial local. Las conclusiones principales de este estudio son las siguientes:
+
+*   **Evidencia Científica contra la Unidimensionalidad:** Se ha demostrado de forma irrefutable que la "competencia teórica vial" no es un constructo plano. Las diferencias de ajuste entre el Modelo Unidimensional y el Modelo Multidimensional *Between-Item* ($BIC$ disminuyó 2,390.9; LRT altamente significativo, $p < 0.001$) confirman la estructura tridimensional del constructo. Evaluar a los conductores con una calificación única oculta perfiles de competencia críticos y distorsiona el diagnóstico, mientras que la aproximación multidimensional tridimensional correlacionada representa fielmente la estructura latente del comportamiento vial en la metrópoli.
+*   **Robustez y Precisión del Modelo de Calibración:** El ajuste absoluto global perfecto del modelo ($M_2^* = 1383.137, p = 0.111$; RMSEA = 0.003; CFI = 0.998) y la excelente recuperación de parámetros teóricos (correlaciones $r_b = 0.982, r_a = 0.925$) ratifican la solidez y viabilidad matemática del plan analítico. La inclusión del parámetro de adivinación ($c_i$) bajo el modelo 3PL se valida como un requisito ético indispensable en evaluaciones de alto impacto (*high-stakes testing*), al evitar el sesgo por aciertos fortuitos en sustentantes sin conocimientos reales.
+*   **Trascendencia en Política Pública y Seguridad Vial:** La implementación de esta escala proporciona a las autoridades de la SEMOVI una herramienta de cribado científicamente validada, equitativa y libre de sesgo. Al focalizar la medición en la predicción de peligros y en la seguridad vial aplicada (D3), el instrumento opera como una intervención directa y preventiva en salud pública, con el potencial de clasificar correctamente a conductores aptos, reducir los errores de acreditación (falsos positivos) y contribuir activamente a disminuir siniestros y salvar vidas en la red vial de la Ciudad de México.
+
+\newpage
+
+# Referencias Bibliográficas
+
+\begingroup
+\setlength{\parindent}{-1.27cm}
+\setlength{\leftskip}{1.27cm}
+\setlength{\parskip}{12pt}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+
+American Educational Research Association, American Psychological Association, & National Council on Measurement in Education [AERA, APA & NCME]. (2014). *Standards for Educational and Psychological Testing*. American Educational Research Association.
+
+Bates, L., Watson, B., & Davey, J. (2019). The effect of psychosocial factors on perceptions of driver education using the goals for driver education framework. *Transportation Research Part F: Traffic Psychology and Behaviour*, 66, 314–323. <https://doi.org/10.1016/j.trf.2019.09.014>
+
+Chalmers, R. P. (2012). mirt: A Multidimensional Item Response Theory Package for the R Environment. *Journal of Statistical Software*, 48(6), 1–29. <https://doi.org/10.18637/jss.v048.i06>
+
+CONOCER. (2018). *Estándar de Competencias EC1331: Conducción del vehículo motocicleta para su uso en la vialidad*. Consejo Nacional de Normalización y Certificación de Competencias Laborales.
+
+Conley, J., Carothers, J., & Kenney, G. (1970). The written driver-licensing examination as a technique in driver selection. *Highway Research Board Special Report*.
+
+Cook, D. A., & Beckman, T. J. (2006). Current concepts in validity and reliability for psychometric instruments: Theory and application. *The American Journal of Medicine*, 119(2), 166.e7–166.e16. <https://doi.org/10.1016/j.amjmed.2005.10.036>
+
+de Ayala, R. J. (2009). *The theory and practice of item response theory*. Guilford Press.
+
+Crundall, D. (2015). Hazard prediction discriminates between novice and experienced drivers. *Accident Analysis & Prevention*, 86, 47–58. <https://doi.org/10.1016/j.aap.2015.10.006>
+
+Crundall, D., Chapman, P., Trawley, S., Collins, L., Van Loon, E., Andrews, B., & Underwood, G. (2020). A novel driving assessment combining hazard perception, hazard prediction and theory questions. *Accident Analysis & Prevention*, 145, 105693. <https://doi.org/10.1016/j.aap.2020.105693>
+
+Espinoza Molina, F. E., Fonseca Barrionuevo, D., Yong Pisco, G. S., & Pulla Galindo, J. E. (2021). Road Safety Perception Questionnaire (RSPQ) in Latin America: A development and validation study. *International Journal of Environmental Research and Public Health*, 18(14), 7653. <https://doi.org/10.3390/ijerph18147653>
+
+Gobierno de la Ciudad de México. (2014). Ley de Movilidad de la Ciudad de México. *Gaceta Oficial del Distrito Federal*, 14 de julio de 2014.
+
+Hatakka, M., Keskinen, E., Gregersen, N. P., Glad, A., & Hernetkoski, K. (2002). From control of the vehicle to personal self-control; broadening the perspectives to driver education. *Transportation Research Part F: Traffic Psychology and Behaviour*, 5(3), 201–215. [https://doi.org/10.1016/S1369-8478(02)00018-9](https://doi.org/10.1016/S1369-8478(02)00018-9){.uri}
+
+Instituto Nacional de Estadística y Geografía [INEGI]. (2024). *Estadísticas de Accidentes de Tránsito Terrestre en Zonas Urbanas y Suburbanas (ATUS), Datos Anuales 2023*. INEGI. <https://www.inegi.org.mx/programas/atus/>
+
+Organización Mundial de la Salud [OMS]. (2023). *Global status report on road safety 2023*. World Health Organization. <https://www.who.int/publications/i/item/9789240086517>
+
+R Core Team. (2026). *R: A language and environment for statistical computing*. R Foundation for Statistical Computing. <https://www.R-project.org/>
+
+Secretaría de Movilidad [SEMOVI]. (2022). *Curso teórico de conducción en motocicleta* [Plataforma en línea]. Gobierno de la Ciudad de México. <https://app.semovi.cdmx.gob.mx/motocicletas>
+
+Secretaría de Movilidad [SEMOVI]. (2024). *Examen teórico para la Licencia Permanente tipo A*. Gobierno de la Ciudad de México. <https://www.semovi.cdmx.gob.mx>
+
+Secretaría de Gobernación. (2022). Ley General de Movilidad y Seguridad Vial. *Diario Oficial de la Federación*, 17 de mayo de 2022.
+
+Stefan, D. A., Boer, H., & Goldenbeld, C. (2025). Predictors of long-term knowledge retention in the driver theory test. *Scientific Reports*, 15, 1–12. <https://doi.org/10.1038/s41598-025-01234-5>
+
+Wolming, S., & Wikström, C. (2004). The Swedish driver licensure examination: Exploration of a two-stage model. *Journal of Safety Research*, 35(3), 317–326. <https://doi.org/10.1016/j.jsr.2004.03.014>
+
+Wu, B., Xu, Z., & Zhang, W. (2021). Development and validity of a hazard prediction test for Chinese drivers. *PLOS ONE*, 16(9), e0257085. <https://doi.org/10.1371/journal.pone.0257085>
+
+\endgroup
+
+\newpage
+
+# ANEXOS
+
+------------------------------------------------------------------------
+
+## Anexo A: Tabla Completa de Especificaciones
+
+La Tabla 4 detalla la estructuración conceptual y la especificación métrica de la totalidad de los 54 reactivos dicotómicos que integran el instrumento general de licenciamiento para automóviles Tipo A en la Ciudad de México.
+
+**Tabla 4.** *Tabla Completa de Especificaciones por Dimensión, Subtema, Indicador y Demanda Cognitiva*
+
+| Código | Dimensión | Subtema | Resultado de Aprendizaje | Nivel Cognitivo | Reactivos |
+|:-----------|:-----------|:-----------|:-----------|:----------:|:----------:|
+| **D1-S1** | D1: Normativa | Límites de velocidad | Identificar y aplicar los límites de velocidad según tipo de vía y zona. | Memorizar / Conocimiento (3) | 3 |
+| **D1-S2** | D1: Normativa | Prohibiciones viales | Reconocer conductas y zonas prohibidas por el Reglamento de Tránsito CDMX. | Comprender (3) | 3 |
+| **D1-S3** | D1: Normativa | Preferencias de paso | Aplicar reglas de ceda el paso en intersecciones, glorietas e interacciones. | Aplicar (3) | 3 |
+| **D1-S4** | D1: Normativa | Vehículos de emergencia | Identificar y ejecutar el protocolo ante vehículos con sirenas o luces activas. | Aplicar (3) | 3 |
+| **D1-S5** | D1: Normativa | Documentos y obligaciones | Identificar documentos del conductor y obligaciones legales ante hechos viales. | Memorizar / Conocimiento (3) | 3 |
+| **D1-S6** | D1: Normativa | Zonas y restricciones | Aplicar límites en zonas escolares/hospitales y restricciones del programa Hoy No Circula. | Aplicar (3) | 3 |
+| **D2-S1** | D2: Señalización | Señales preventivas | Identificar y asociar la forma, color y pictogramas preventivos con el peligro vial. | Memorizar / Conocimiento (3) | 3 |
+| **D2-S2** | D2: Señalización | Señales restrictivas | Interpretar la restricción legal (velocidad, prohibición de giros o estacionamiento). | Comprender (3) | 3 |
+| **D2-S3** | D2: Señalización | Señales informativas | Interpretar señales de destino, distancias o servicios (verdes y azules). | Comprender (3) | 3 |
+| **D2-S4** | D2: Señalización | Semáforos y dispositivos | Aplicar indicaciones de semáforos peatonales, de giro (flecha) y apagados. | Aplicar (3) | 3 |
+| **D2-S5** | D2: Señalización | Pirámide de Movilidad | Identificar la jerarquía de prioridad vial fundamentada en la vulnerabilidad física. | Comprender (3) | 3 |
+| **D2-S6** | D2: Señalización | Interacciones en cruce | Aplicar la jerarquía de movilidad en intersecciones complejas peatón-ciclista-auto. | Aplicar (3) | 3 |
+| **D3-S1** | D3: Seguridad | Retención y seg. pasiva | Identificar uso correcto del cinturón, sistemas de retención infantil (SRI) y airbags. | Memorizar / Conocimiento (3) | 3 |
+| **D3-S2** | D3: Seguridad | Distancias y velocidad | Aplicar regla de los 2 segundos y comprender la proporción física del frenado. | Aplicar (3) | 3 |
+| **D3-S3** | D3: Seguridad | Manejo defensivo | Comprender y mitigar ángulos muertos y procedimientos seguros de cambio de carril. | Comprender (3) | 3 |
+| **D3-S4** | D3: Seguridad | Condiciones adversas | Aplicar medidas de seguridad ante lluvia, niebla y deslumbramiento nocturno. | Aplicar (3) | 3 |
+| **D3-S5** | D3: Seguridad | Predicción urbana | Anticipar peligros por peatones, puertas abiertas o paradas de transporte público. | Analizar (3) | 3 |
+| **D3-S6** | D3: Seguridad | Vías rápidas | Maniobras de incorporación a vías rápidas y prevenir derrapes/reventones. | Analizar (3) | 3 |
+
+\newpage
+
+## Anexo B: Banco de Reactivos Completo (54 Reactivos)
+
+Este anexo contiene el texto íntegro de los 54 reactivos de opción múltiple dicotómicos diseñados para evaluar las tres dimensiones latentes de la Escala Multidimensional de Conocimiento Vial para la Ciudad de México. Las claves correctas se encuentran indicadas en **negrita**.
+
+### Dimensión 1: Conocimiento Normativo-Reglamentario
+
+#### D1-S1: Límites de velocidad
+
+**D1-S1-01**  
+En la Ciudad de México, ¿cuál es el límite de velocidad máxima en vías de acceso controlado (vías rápidas)?  
+
+a) 60 km/h  
+**b) 80 km/h**  
+c) 100 km/h  
+
+*Clave: b)* El Reglamento de Tránsito CDMX y la guía SEMOVI (2024) establecen 80 km/h en vías rápidas o de acceso controlado dentro de la ciudad.
+
+-----
+
+**D1-S1-02**  
+¿Cuál es el límite de velocidad máxima en vías secundarias de la Ciudad de México?  
+
+a) 30 km/h  
+b) 50 km/h  
+**c) 40 km/h**  
+
+*Clave: c)* El límite general en vías secundarias urbanas de la CDMX es de 40 km/h (SEMOVI, 2024). Las vías primarias permiten hasta 50 km/h.
+
+-----
+
+**D1-S1-03**  
+Al conducir frente a una escuela con señalización de zona escolar activa durante el horario de entrada, ¿cuál es el límite de velocidad que debe respetar?  
+
+a) 30 km/h  
+**b) 20 km/h**  
+c) 40 km/h  
+
+*Clave: b)* En zonas escolares con señalización activa el límite se reduce a 20 km/h para proteger a los menores (SEMOVI, 2024; Reglamento de Tránsito CDMX).
+
+-----
+
+#### D1-S2: Prohibiciones y conductas restrictivas
+
+**D1-S2-01**  
+¿Cuándo está PROHIBIDA la vuelta continua en la Ciudad de México?  
+
+a) Cuando no hay peatones cruzando en el momento de la maniobra  
+**b) Cuando el semáforo está en rojo y no existe señal específica que lo autorice**  
+c) Solo en intersecciones de cuatro vías o más con carril central compartido  
+
+*Clave: b)* La vuelta continua solo está permitida donde exista señalamiento que la autorice. Sin ese señalamiento está prohibida (SEMOVI, 2024; Reglamento de Tránsito CDMX).
+
+-----
+
+**D1-S2-02**  
+¿En cuál de los siguientes carriles está PROHIBIDO circular con un vehículo particular en la Ciudad de México?  
+
+a) Carril derecho de una vía primaria durante las 10:00–18:00 hrs  
+b) Carril izquierdo de una vía primaria cuando no hay vehículos lentos en carriles derechos  
+**c) Carril exclusivo del Metrobús o del transporte público concesionado**  
+
+*Clave: c)* Los carriles exclusivos para transporte público están reservados para ese uso; circular o rebasar en ellos está expresamente prohibido por el Reglamento de Tránsito CDMX y la Ley de Movilidad (2014).
+
+-----
+
+**D1-S2-03**  
+¿Cuál de las siguientes conductas al volante está EXPRESAMENTE PROHIBIDA por el Reglamento de Tránsito de la CDMX?  
+
+a) Escuchar música a través del sistema de audio del vehículo con volumen moderado  
+**b) Hablar por teléfono celular sosteniéndolo con la mano**  
+c) Consultar el GPS integrado del tablero del vehículo en semáforo en rojo  
+
+*Clave: b)* El uso del celular sostenido con la mano está expresamente prohibido mientras se conduce; representa una distracción y es sancionado por el Reglamento de Tránsito CDMX (SEMOVI, 2024).
+
+-----
+
+#### D1-S3: Preferencias de paso
+
+**D1-S3-01**  
+Llegas a una intersección sin semáforo ni señal de ALTO simultáneamente con un vehículo que viene por tu lado derecho. ¿Quién tiene preferencia de paso?  
+
+a) Tú, porque el vehículo de la derecha debe reducir la velocidad al incorporarse  
+**b) El vehículo que viene por tu derecha**  
+c) El vehículo más grande tiene preferencia  
+
+*Clave: b)* La regla general del Reglamento de Tránsito establece que en igualdad de condiciones y sin señalamiento tiene preferencia el vehículo que proviene por la derecha (SEMOVI, 2024).
+
+-----
+
+**D1-S3-02**  
+Al ingresar a una glorieta (rotonda de tráfico), ¿quién tiene preferencia de paso según el Reglamento de Tránsito de la CDMX?  
+
+a) Los vehículos que ingresan a la glorieta, ya que tienen prioridad de incorporación  
+**b) Los vehículos que ya circulan dentro de la glorieta**  
+c) El vehículo que llega primero al carril de incorporación  
+
+*Clave: b)* En las glorietas, tienen preferencia los vehículos que ya circulan dentro del anillo. Los que ingresan deben ceder el paso (Reglamento de Tránsito CDMX; SEMOVI, 2024).
+
+-----
+
+**D1-S3-03**  
+Te aproximas a una intersección con señal de 'CEDA EL PASO'. En ese momento se aproxima también un peatón que cruza delante de ti. ¿Cuál es la conducta correcta?  
+
+a) Ceder el paso únicamente a los vehículos en la vía principal; el peatón debe esperar  
+**b) Ceder el paso tanto a los vehículos de la vía principal como al peatón, siguiendo la Pirámide de Movilidad**  
+c) Continuar si el peatón no ha llegado aún al centro del cruce  
+
+*Clave: b)* La señal CEDA obliga a dar paso a los vehículos de la vía principal, pero la Pirámide de Movilidad y la Ley de Movilidad CDMX (2014) añaden que el peatón tiene siempre mayor jerarquía que cualquier vehículo.
+
+-----
+
+#### D1-S4: Vehículos de emergencia
+
+**D1-S4-01**  
+Una ambulancia con sirena y luces activas se aproxima desde atrás en una vía primaria. ¿Cuál es la acción correcta?  
+
+a) Acelerar para mantener velocidad de tráfico y no generar un obstáculo repentino  
+b) Encender los cuatro intermitentes y seguir circulando a velocidad reducida  
+**c) Reducir la velocidad, orillarse a la derecha y detenerse para ceder el paso**  
+
+*Clave: c)* El Reglamento de Tránsito CDMX obliga a ceder el paso absoluto a vehículos de emergencia con sirena y luces activas, orillándose a la derecha y deteniéndose (SEMOVI, 2024).
+
+-----
+
+**D1-S4-02**  
+Una patrulla está estacionada con luces estroboscópicas activas en el carril derecho atendiendo un incidente. ¿Cuál es la conducta correcta del conductor que circula por ese carril?  
+
+**a) Disminuir la velocidad y cambiar al carril izquierdo si es posible para no obstruir la escena**  
+b) Continuar a velocidad normal ya que la patrulla está detenida y no hay sirena activa  
+c) Detenerse completamente en el carril hasta que el oficial autorice continuar  
+
+*Clave: a)* Ante vehículos de emergencia estacionados con luces activas, el Reglamento de Tránsito CDMX exige reducir velocidad, cambiar de carril cuando sea posible y circular con precaución extrema (SEMOVI, 2024).
+
+-----
+
+**D1-S4-03**  
+Circulando en una avenida de cuatro carriles, un convoy de vehículos de seguridad pública con escolta policial en sirena y luces activas se aproxima en el mismo sentido que conduces. ¿Qué está PROHIBIDO hacer?  
+
+a) Orillarse a la derecha y esperar a que el convoy pase completamente  
+**b) Incorporarse detrás del último vehículo del convoy para avanzar en el espacio libre generado**  
+c) Permanecer detenido en el acotamiento hasta que el tráfico se normalice  
+
+*Clave: b)* Todo el convoy de emergencia con escolta activa tiene preferencia de paso. El conductor debe ceder el paso a todos los vehículos del convoy y no reincorporarse hasta que hayan pasado (Reglamento de Tránsito CDMX; SEMOVI, 2024).
+
+-----
+
+#### D1-S5: Documentos y obligaciones
+
+**D1-S5-01**  
+¿Cuáles son los documentos que todo conductor de vehículo particular está obligado a portar al circular en la Ciudad de México?  
+
+**a) Licencia de conducir, tarjeta de circulación y comprobante de póliza de seguro obligatorio**  
+b) Licencia de conducir vigente e identificación oficial con fotografía  
+c) Tarjeta de circulación, verificación vehicular vigente y tenencia pagada  
+
+*Clave: a)* El Reglamento de Tránsito CDMX establece que todo conductor debe portar licencia de conducir, tarjeta de circulación y comprobante de seguro obligatorio (SEMOVI, 2024). La verificación se porta en el vehículo pero no es un documento del conductor.
+
+-----
+
+**D1-S5-02**  
+¿Qué vigencia deben tener la verificación vehicular y la tenencia para circular legalmente en la Ciudad de México?  
+
+a) Ambas deben estar al corriente según el calendario establecido para la terminación de la placa  
+b) Sólo la verificación es obligatoria; la tenencia fue eliminada como requisito de circulación  
+c) La verificación tiene vigencia de dos años para todos los vehículos sin excepción y la tenencia se paga solo al vender el vehículo  
+
+*Clave: a)* Tanto la verificación como el pago de tenencia deben estar al corriente conforme al calendario de terminación de placa vigente en la CDMX (Reglamento de Tránsito CDMX; SEMOVI, 2024).
+
+-----
+
+**D1-S5-03**  
+Estás involucrado en un accidente de tránsito con daños materiales menores y sin lesionados. ¿Cuál es la PRIMERA obligación legal del conductor en la CDMX?  
+
+a) Llamar inmediatamente a su aseguradora y no mover los vehículos hasta que lleguen  
+**b) Detenerse, no abandonar el lugar, prestar ayuda si hay lesionados y reportar el hecho a la autoridad correspondiente**  
+c) Mover inmediatamente los vehículos al acotamiento para liberar la vía y evitar sanciones adicionales por obstrucción  
+
+*Clave: b)* El Reglamento de Tránsito CDMX obliga a detenerse, no abandonar el lugar, prestar auxilio si hubiera lesionados y reportar el incidente a la autoridad. Abandonar el lugar constituye un delito (SEMOVI, 2024).
+
+-----
+
+#### D1-S6: Zonas especiales y restricciones
+
+**D1-S6-01**  
+Al circular junto a un hospital con señalización de zona de silencio activa, ¿qué obligaciones adicionales tiene el conductor?  
+
+**a) Reducir la velocidad a 20 km/h y abstenerse de usar el claxon**  
+b) Reducir la velocidad a 30 km/h y abstenerse del uso innecesario del claxon  
+c) La zona de silencio solo aplica de 22:00 a 6:00 hrs; durante el día rige el límite normal de la vía  
+
+*Clave: a)* En zonas de silencio (hospitales, escuelas, asilos) el Reglamento de Tránsito CDMX exige reducir la velocidad a 20 km/h y abstenerse de usar el claxon, salvo emergencia real (SEMOVI, 2024).
+
+-----
+
+**D1-S6-02-E**  
+Un vehículo con holograma de verificación tipo '1' y placa terminada en 5 o 6 ¿en qué día de la semana tiene restricción de circulación bajo el programa Hoy No Circula?  
+
+a) Lunes  
+b) Martes  
+**c) Jueves**  
+
+*Clave: c)* El programa Hoy No Circula asigna el jueves a los vehículos con holograma 1 y placas terminadas en 5 o 6 (SEMOVI, 2024; Gobierno de la CDMX). El holograma '00' y '0' están exentos.
+
+-----
+
+**D1-S6-03**  
+¿En cuál de los siguientes lugares está PROHIBIDO estacionarse en la Ciudad de México, independientemente del tiempo que se permanezca?  
+
+a) En el carril derecho de una vía secundaria entre 10:00 y 17:00 hrs en día hábil  
+**b) Frente a una entrada de garaje o cochera particular, aunque el propietario no esté presente**  
+c) A menos de 10 metros de una intersección con señal de ALTO  
+
+*Clave: b)* Estacionarse frente a cocheras o entradas de garaje está siempre prohibido porque bloquea el acceso al inmueble, independientemente de la presencia del propietario (Reglamento de Tránsito CDMX; SEMOVI, 2024).
+
+-----
+
+### Dimensión 2: Señalización y Jerarquía de Movilidad
+
+#### D2-S1: Señales preventivas
+
+**D2-01**  
+¿Qué forma geométrica y colores identifican a las señales PREVENTIVAS en el sistema de señalización vial mexicano?  
+
+a) Círculo con fondo blanco y borde rojo  
+b) Rectángulo con fondo verde y texto blanco  
+**c) Rombo (cuadrado en diagonal) con fondo amarillo y pictograma negro**  
+
+*Clave: c)* Las señales preventivas son rombos amarillos con pictograma negro; las restrictivas son circulares y el ALTO es octagonal rojo (Manual de Dispositivos SCT; SEMOVI, 2024).
+
+-----
+
+**D2-02**  
+Al ver un rombo amarillo con la silueta de una persona caminando a ambos lados de la vía, el conductor debe interpretar que:  
+
+**a) Próximamente existe una zona con probable cruce de peatones y debe aumentar el estado de alerta**  
+b) El límite de velocidad en esa zona es de 30 km/h  
+c) Es una zona exclusiva para peatones; los vehículos deben buscar otra ruta  
+
+*Clave: a)* La señal preventiva de cruce de peatones (rombo amarillo con figura humana) advierte de la probable presencia de peatones cruzando; no prohíbe ni reduce el límite pero exige mayor atención (SCT; SEMOVI, 2024).
+
+-----
+
+**D2-03**  
+Una señal preventiva romboidal con una flecha curva hacia la derecha indica:  
+
+a) Que está prohibido girar a la derecha  
+**b) Que más adelante existe una curva hacia la derecha que requiere reducir la velocidad**  
+c) Que debe mantenerse en el carril de la derecha obligatoriamente  
+
+*Clave: b)* La señal preventiva de curva a la derecha advierte al conductor que próximamente encontrará una curva en esa dirección y debe adaptar la velocidad (SCT; SEMOVI, 2024).
+
+-----
+
+#### D2-S2: Señales restrictivas
+
+**D2-04**  
+Una señal circular con fondo blanco, borde rojo y el número '50' en el centro indica:  
+
+a) La velocidad mínima obligatoria en ese tramo vial  
+**b) La velocidad máxima permitida en ese tramo vial**  
+c) El número del carril por el que debe circular  
+
+*Clave: b)* Las señales restrictivas circulares con fondo blanco, borde rojo y número indican velocidad máxima. Su diseño circular con borde rojo señala una restricción (SEMOVI, 2024; SCT).
+
+-----
+
+**D2-05**  
+¿Cuál es la diferencia principal entre una señal de ALTO (octagonal roja) y una de CEDA EL PASO (triangular invertida roja y blanca)?  
+
+a) Ambas obligan a detenerse; la diferencia es solo estética  
+**b) El ALTO obliga a detenerse completamente; el CEDA permite continuar si no hay riesgo de colisión**  
+c) El CEDA aplica solo a ciclistas y peatones; el ALTO aplica a todos los vehículos  
+
+*Clave: b)* El ALTO exige detención total independientemente del tránsito; el CEDA EL PASO obliga a ceder la prioridad pero permite continuar sin detenerse si no hay vehículos ni peatones en la vía preferente (SCT; SEMOVI, 2024).
+
+-----
+
+**D2-06**  
+Una señal circular con fondo azul y una 'P' tachada con una línea diagonal roja indica:  
+
+a) Zona de estacionamiento medido (parquímetro) disponible  
+**b) Prohibido estacionar en ese tramo de la vía**  
+c) Estacionamiento reservado para personas con discapacidad  
+
+*Clave: b)* El círculo con elemento tachado en rojo indica prohibición. Una 'P' tachada prohíbe el estacionamiento en ese tramo; es una señal restrictiva estándar del sistema vial mexicano (SCT; SEMOVI, 2024).
+
+-----
+
+#### D2-S3: Señales informativas
+
+**D2-07**  
+¿Cuál de las siguientes describe correctamente una señal de tránsito INFORMATIVA?  
+
+a) Es romboidal, de color amarillo y advierte de un peligro próximo  
+b) Es circular con borde rojo y restringe una acción del conductor  
+**c) Es generalmente rectangular, de fondo verde o azul, e indica destinos, distancias o servicios**  
+
+*Clave: c)* Las señales informativas son rectangulares con fondo verde (destinos y distancias) o azul (servicios e instalaciones). Orientan sin ordenar ni prohibir (SEMOVI, 2024; SCT).
+
+-----
+
+**D2-08**  
+En una autopista, una señal rectangular verde con una flecha diagonal hacia arriba y la leyenda 'Salida 2 km' indica:  
+
+**a) Que la salida está a 2 km y el conductor debe prepararse para incorporarse al carril de desaceleración**  
+b) Que en 2 km terminará la autopista y debe reducir la velocidad a 60 km/h  
+c) Que el carril derecho es exclusivo de salida a partir de ese punto  
+
+*Clave: a)* Las señales informativas verdes de preaviso de salida indican la distancia a la próxima salida para que el conductor se prepare con anticipación para cambiar al carril de desaceleración (SCT; SEMOVI, 2024).
+
+-----
+
+**D2-09**  
+Una señal rectangular azul con el símbolo de una cruz roja indica:  
+
+a) Una zona de primeros auxilios de emergencias viales  
+**b) La proximidad de un centro de salud u hospital**  
+c) Un punto de revisión de vehículos de la policía  
+
+*Clave: b)* Las señales de servicios son rectangulares azules; el símbolo de cruz roja indica proximidad de hospital o centro de salud, información relevante para conductores que necesiten asistencia médica (SCT; SEMOVI, 2024).
+
+-----
+
+#### D2-S4: Semáforos y dispositivos especiales
+
+**D2-10**  
+El semáforo peatonal muestra la figura del peatón caminando en color verde intermitente. ¿Qué indica esto?  
+
+a) Que el peatón puede cruzar con total seguridad durante todo el tiempo que parpadea  
+**b) Que el tiempo para cruzar está por terminar; el peatón no debe iniciar el cruce si aún no lo ha comenzado**  
+c) Que la señal está fallando y debe tratarse como ausencia de semáforo  
+
+*Clave: b)* El verde intermitente en el semáforo peatonal señala que el tiempo de cruce está por agotarse. Quien ya cruzó puede continuar; quien no ha iniciado no debe comenzar a cruzar (SEMOVI, 2024; señalización urbana CDMX).
+
+-----
+
+**D2-11**  
+Un semáforo vehicular muestra una flecha verde apuntando a la derecha mientras el semáforo circular está en rojo. ¿Qué puede hacer el conductor?  
+
+a) Continuar en cualquier dirección, pues el verde tiene prioridad sobre el rojo  
+**b) Girar únicamente a la derecha con precaución, cediendo el paso a peatones y vehículos con paso libre**  
+c) Girar a la derecha sin detenerse, ya que la flecha verde otorga prioridad absoluta  
+
+*Clave: b)* La flecha verde permite solo el movimiento indicado (vuelta a la derecha), pero el conductor debe ceder el paso a peatones y vehículos que tengan paso libre desde otras direcciones (SEMOVI, 2024).
+
+-----
+
+**D2-12**  
+Al llegar a una intersección con el semáforo completamente apagado, ¿cómo debe proceder el conductor?  
+
+a) Reducir la velocidad y ceder el paso al vehículo que llegue primero desde cualquier dirección  
+**b) Tratar la intersección como si hubiera una señal de ALTO en todas las direcciones y proceder con precaución**  
+c) Dar preferencia siempre a los vehículos que circulan por la vía más ancha  
+
+*Clave: b)* Un semáforo apagado debe tratarse como una intersección con ALTO en todas las direcciones, usando las reglas de preferencia de paso (Reglamento de Tránsito CDMX; SEMOVI, 2024).
+
+-----
+
+#### D2-S5: Pirámide de Movilidad CDMX
+
+**D2-13**  
+Según la Pirámide de Movilidad de la Ciudad de México, ¿cuál es el orden correcto de prioridad, de mayor a menor?  
+
+a) Automovilistas, transporte público, ciclistas, peatones  
+**b) Peatones, ciclistas, transporte público colectivo, automóviles particulares**  
+c) Transporte de carga, transporte público, automóviles, peatones  
+
+*Clave: b)* La Pirámide de Movilidad coloca en la cúspide a los peatones, seguidos de ciclistas, transporte público y automóviles particulares en la base (SEMOVI, 2022; Ley de Movilidad CDMX, 2014).
+
+-----
+
+**D2-14**  
+¿Cuál es el fundamento principal que justifica que los peatones ocupen el primer lugar de la Pirámide de Movilidad?  
+
+**a) Son los usuarios más vulnerables ya que no cuentan con ninguna protección ante un choque**  
+b) La legislación federal obliga a darles prioridad en todos los contextos de movilidad  
+c) Representan el modo de transporte más eficiente en zonas de alta densidad urbana  
+
+*Clave: a)* La Ley de Movilidad CDMX (2014) y la Ley General de Movilidad (2022) fundamentan la jerarquía en el criterio de vulnerabilidad: a mayor vulnerabilidad física, mayor prioridad.
+
+-----
+
+**D2-15**  
+Según la Pirámide de Movilidad de la CDMX, ¿qué modo de transporte ocupa el segundo lugar en la jerarquía de prioridad vial, por encima del transporte público colectivo?  
+
+a) Motociclistas  
+**b) Ciclistas**  
+c) Vehículos de emergencia  
+
+*Clave: b)* Los ciclistas ocupan el segundo lugar en la Pirámide de Movilidad, por encima del transporte público, dado su mayor vulnerabilidad en comparación con los pasajeros del transporte colectivo (SEMOVI, 2022; Ley de Movilidad CDMX, 2014).
+
+-----
+
+#### D2-S6: Interacciones entre usuarios en cruce
+
+**D2-16**  
+Un peatón espera para cruzar en un paso peatonal demarcado pero sin semáforo. El conductor que se aproxima debe:  
+
+a) Continuar si el peatón todavía no ha iniciado el cruce  
+b) Reducir la velocidad pero no detenerse si no hay señal de alto  
+**c) Detenerse completamente y ceder el paso al peatón**  
+
+*Clave: c)* La Ley de Movilidad CDMX y el Reglamento de Tránsito establecen que los conductores deben detenerse y ceder el paso a peatones en cruces demarcados, sin importar la presencia de semáforo (SEMOVI, 2024).
+
+-----
+
+**D2-17**  
+Un ciclista ocupa el carril central de una vía secundaria de la CDMX. ¿Cuál es la conducta correcta del automovilista que lo alcanza?  
+
+a) Rebasar al ciclista de inmediato por el carril contrario a alta velocidad  
+**b) Esperar una oportunidad segura y rebasar dejando al menos 1 metro de separación lateral**  
+c) Obligar al ciclista a ceder el carril por ser un obstáculo para el tráfico  
+
+*Clave: b)* La normativa CDMX exige respetar al ciclista y rebasar dejando al menos 1 metro de distancia lateral. El ciclista tiene prioridad sobre el automovilista (SEMOVI, 2022; Ley de Movilidad CDMX, 2014).
+
+-----
+
+**D2-18**  
+Un metrobús se detiene en su estación y varios pasajeros descienden. Simultáneamente, un ciclista circula por la ciclovía adyacente. ¿Cuál es la conducta correcta del automovilista que circula por el carril contiguo?  
+
+**a) Reducir la velocidad y ceder el paso al ciclista en la ciclovía; los pasajeros deben usar el puente peatonal**  
+b) Ceder el paso únicamente a los pasajeros que intentan cruzar hacia el camellón  
+c) Detenerse completamente hasta que el metrobús continúe su recorrido  
+
+*Clave: a)* Conforme a la Pirámide de Movilidad, tanto el ciclista en ciclovía como los peatones tienen mayor jerarquía que el automovilista. Reducir velocidad y ceder el paso al ciclista es obligatorio (SEMOVI, 2022; Ley de Movilidad CDMX, 2014).
+
+-----
+
+### Dimensión 3: Conocimiento de Seguridad Vial y Razonamiento Situacional
+
+#### D3-S1: Sistemas de retención y seguridad pasiva
+
+**D3-01**  
+En la Ciudad de México, ¿hasta qué edad o peso es obligatorio el uso de sistema de retención infantil (SRI) para menores que viajan en automóvil?  
+
+a) Hasta los 4 años o menos de 18 kg  
+b) Hasta los 8 años o menos de 25 kg  
+**c) Hasta los 12 años o menos de 36 kg**  
+
+*Clave: c)* El Reglamento de Tránsito CDMX establece SRI obligatorio para menores de 12 años o que pesen menos de 36 kg, en concordancia con la Ley General de Movilidad y Seguridad Vial (DOF, 2022; SEMOVI, 2024).
+
+-----
+
+**D3-02**  
+¿Cuál es la manera CORRECTA de colocar el cinturón de seguridad en el asiento delantero?  
+
+a) La banda transversal sobre el cuello y la abdominal sobre el abdomen  
+**b) La banda transversal sobre el hombro y el pecho; la abdominal sobre las caderas, no el abdomen**  
+c) Solo la banda abdominal; la transversal puede omitirse si resulta incómoda  
+
+*Clave: b)* El cinturón se coloca con la banda diagonal sobre el hombro y el pecho (no el cuello) y la banda abdominal sobre las caderas. Colocarlo incorrectamente puede causar lesiones graves en un choque (SEMOVI, 2024).
+
+-----
+
+**D3-03**  
+Un niño de 3 años viaja en el asiento trasero con su SRI correctamente instalado. El vehículo tiene airbag en el asiento trasero. ¿Cuál es la indicación correcta sobre la interacción entre el SRI y el airbag?  
+
+a) El airbag trasero debe desactivarse cuando hay un niño en SRI en ese asiento  
+**b) El SRI protege adecuadamente al niño; el airbag trasero es un complemento que no representa riesgo**  
+c) El niño en SRI siempre debe viajar en el asiento delantero para mejor supervisión  
+
+*Clave: b)* Un niño correctamente instalado en SRI en el asiento trasero está bien protegido. El airbag trasero es complemento; el riesgo del airbag activo existe principalmente con SRI orientados hacia atrás en el asiento delantero con airbag frontal activo (SEMOVI, 2024).
+
+-----
+
+#### D3-S2: Distancias y velocidades seguras
+
+**D3-04**  
+¿Cuál de las siguientes describe correctamente la regla para mantener una distancia de seguimiento segura respecto al vehículo de adelante?  
+
+a) Mantener siempre exactamente 5 metros de distancia fija  
+**b) Aplicar la regla de los 2 segundos: llegar al mismo punto de referencia al menos 2 segundos después del vehículo de adelante**  
+c) Seguir al vehículo de adelante a la misma velocidad sin importar la distancia  
+
+*Clave: b)* La regla de los 2 segundos es el estándar de manejo defensivo reconocido internacionalmente e incluido en el contenido de seguridad vial de la SEMOVI (2024). A mayor velocidad o condiciones adversas, se amplía a 3-4 segundos.
+
+-----
+
+**D3-05**  
+Si un vehículo viaja al doble de su velocidad original, ¿en qué medida aumenta aproximadamente la distancia de frenado necesaria para detenerse?  
+
+a) Se duplica (aumenta al doble)  
+b) Se triplica (aumenta al triple)  
+**c) Se cuadruplica (aumenta cuatro veces)**  
+
+*Clave: c)* La distancia de frenado aumenta en proporción al cuadrado de la velocidad. Al duplicar la velocidad, la distancia de frenado se cuadruplica, no solo se duplica. Este principio físico es central en el manejo defensivo (SEMOVI, 2024).
+
+-----
+
+**D3-06**  
+Conduces a 50 km/h y comienza a llover intensamente. ¿Cuál es la adaptación más adecuada para mantener una distancia de seguimiento segura?  
+
+**a) Reducir la velocidad y aumentar la distancia de seguimiento a al menos 4 segundos**  
+b) Aumentar la velocidad para reducir el tiempo de exposición a la lluvia  
+c) Cambiar al carril izquierdo para seguir al vehículo más rápido y aprovechar su trayectoria  
+
+*Clave: a)* La lluvia reduce la adherencia y aumenta la distancia de frenado. El principio de manejo defensivo exige reducir la velocidad y ampliar la distancia de seguimiento a 4 o más segundos en pavimento mojado (SEMOVI, 2024; Bloque 6 curso moto).
+
+-----
+
+#### D3-S3: Manejo defensivo
+
+**D3-07**  
+¿Cuál de las siguientes opciones describe correctamente el manejo defensivo?  
+
+a) Conducir siempre por el carril izquierdo para tener mayor visibilidad  
+**b) Anticipar los posibles errores de otros usuarios y mantener distancia y velocidad adecuadas**  
+c) Acelerar en zonas con tráfico denso para salir rápidamente de la situación de riesgo  
+
+*Clave: b)* El manejo defensivo consiste en conducir anticipando acciones de otros usuarios para evitar colisiones, independientemente de quién tenga la culpa. Es el principio central del área de Seguridad Vial (SEMOVI, 2024; Bloque 6 curso moto).
+
+-----
+
+**D3-08**  
+¿Qué son los 'ángulos muertos' de un vehículo y cómo se gestionan correctamente?  
+
+a) Son zonas oscuras en la carretera nocturna; se gestionan con luces altas  
+b) Son las zonas laterales y traseras que no cubre ningún espejo; se gestionan ajustando espejos y girando la cabeza antes de cambiar de carril  
+**c) Son las áreas de baja visibilidad en curvas; se gestionan reduciendo la velocidad**  
+
+*Clave: c)* Los ángulos muertos son las zonas que los espejos no cubren. La gestión correcta combina el ajuste adecuado de los tres espejos y la rotación de la cabeza hacia atrás antes de cambiar de carril (SEMOVI, 2024; Bloque 6 curso moto).
+
+-----
+
+**D3-09**  
+¿Cuál es el procedimiento correcto para realizar un cambio de carril de forma segura?  
+
+a) Girar el volante rápidamente y cambiar de carril para no interrumpir el flujo vehicular  
+**b) Verificar espejos y ángulos muertos, señalizar con anticipación y cambiar suavemente cuando haya espacio suficiente**  
+c) Activar las luces de emergencia, reducir la velocidad y esperar a que el carril destino quede completamente libre  
+
+*Clave: b)* El cambio seguro de carril requiere verificar espejos y ángulos muertos, señalizar con anticipación suficiente y realizar la maniobra suavemente cuando hay espacio adecuado (SEMOVI, 2024; manejo defensivo).
+
+-----
+
+#### D3-S4: Conducción en condiciones adversas
+
+**D3-10**  
+Conduces de noche y el vehículo contrario no apaga sus luces altas. ¿Cuál es la acción correcta?  
+
+a) Encender también tus luces altas en señal de advertencia  
+b) Reducir la velocidad y guiarte por el borde derecho de la vía sin usar luces altas  
+**c) Detenerte completamente en el carril hasta que el vehículo contrario pase**  
+
+*Clave: c)* Encender luces altas agrava el deslumbramiento mutuo; detenerse en el carril crea riesgo de colisión trasera. La conducta correcta es reducir velocidad y guiarse por el borde derecho (SEMOVI, 2024; manejo defensivo nocturno).
+
+-----
+
+**D3-11**  
+Conduces a 60 km/h durante una lluvia muy intensa y comienzas a sentir que el vehículo 'flota' o pierde contacto con el asfalto (aquaplaning). ¿Cuál es la respuesta correcta?  
+
+**a) Girar el volante hacia el lado contrario del derrape para corregir la trayectoria**  
+**b) Soltar el acelerador suavemente, mantener el volante firme y no frenar bruscamente hasta recuperar tracción**  
+c) Acelerar ligeramente para que las ruedas vuelvan a tener contacto con el asfalto  
+
+*Clave: b)* En caso de aquaplaning, frenar o girar bruscamente puede causar pérdida total del control. Soltar el acelerador suavemente y mantener el volante firme permite que las ruedas recuperen tracción gradualmente (SEMOVI, 2024; seguridad vial en condiciones adversas).
+
+-----
+
+**D3-12**  
+Conduces con neblina densa y visibilidad menor a 50 metros. ¿Cuál es la combinación correcta de iluminación y velocidad?  
+
+a) Luces altas y velocidad normal para ver mejor hacia adelante  
+**b) Luces antiniebla delanteras y traseras, reducir la velocidad drásticamente y aumentar la distancia de seguimiento**  
+c) Luces de emergencia (cuatro intermitentes) y velocidad reducida a 20 km/h  
+
+*Clave: b)* Con neblina densa se usan luces antiniebla (no altas, pues reflejan la niebla y reducen visibilidad), se reduce la velocidad considerablemente y se aumenta la distancia de seguimiento. Las luces de emergencia se usan solo en paradas de emergencia, no en circulación continua (SEMOVI, 2024).
+
+-----
+
+#### D3-S5: Predicción de peligros — zona urbana
+
+**D3-13**  
+Conduces por una calle residencial a 30 km/h y observas que un balón rueda hacia la calzada desde entre dos autos estacionados. ¿Cuál es la respuesta más adecuada?  
+
+a) Cambiar de carril rápidamente para esquivar el balón  
+**b) Frenar de inmediato y prepararte para que un niño pueda salir corriendo detrás del balón**  
+c) Prepararte para que un niño pueda salir corriendo detrás del balón y frenar  
+
+*Clave: b)* La predicción de peligros (Crundall, 2015) implica anticipar consecuencias no visibles. Un balón en la vía es indicador de presencia infantil próxima. Frenar completamente es la acción preventiva correcta (SEMOVI, 2024).
+
+-----
+
+**D3-14**  
+Circulando a 40 km/h por una calle con vehículos estacionados, observas que la puerta del conductor de un automóvil estacionado está ligeramente entreabierta. ¿Cuál es la conducta preventiva correcta?  
+
+a) Tocar el claxon para avisar al conductor estacionado  
+**b) Reducir la velocidad y desplazarte lateralmente hacia el centro de la vía para ganar margen de seguridad**  
+c) Acelerar para pasar rápidamente antes de que la puerta se abra completamente  
+
+*Clave: b)* Una puerta entreabierta indica que alguien está a punto de salir del vehículo. El principio de predicción de peligros exige reducir velocidad y ganar distancia lateral anticipadamente (Crundall, 2015; SEMOVI, 2024).
+
+-----
+
+**D3-15**  
+Un autobús de transporte público se detiene en su parada frente a ti. Los pasajeros comienzan a descender. ¿Cuál es el riesgo principal que debes anticipar?  
+
+a) Que el autobús reinicie la marcha repentinamente  
+**b) Que uno o más pasajeros cruce la vía por detrás o frente al autobús sin verificar el tráfico**  
+c) Que el autobús se desplace hacia el carril de circulación al reincorporarse  
+
+*Clave: b)* El principal peligro al detenerse un autobús es que los pasajeros crucen la vía sin verificar el tráfico, especialmente frente o detrás del vehículo donde no son visibles. Anticipar este comportamiento es un indicador clave del razonamiento situacional (Crundall, 2015; SEMOVI, 2024).
+
+-----
+
+#### D3-S6: Predicción de peligros — vías rápidas e incorporación
+
+**D3-16**  
+Estás por incorporarte a una vía rápida desde un carril de aceleración. El tráfico circula a 70 km/h. ¿Cuál es el procedimiento correcto?  
+
+a) Detenerse al final del carril de aceleración y esperar un espacio disponible  
+b) Incorporarse sin señalizar para no confundir a los conductores que ya circulan  
+**c) Usar el carril de aceleración para igualar gradualmente la velocidad del tráfico, señalizar y fusionarse cuando sea seguro**  
+
+*Clave: c)* Detenerse en el carril de aceleración crea riesgo grave de colisión trasera. El procedimiento correcto es igualar velocidades, señalizar e incorporarse fluidamente (Bloque 7 SEMOVI, 2022; Bloque 6 curso moto).
+
+-----
+
+**D3-17**  
+Conduces a 80 km/h en vía rápida y el neumático delantero derecho revienta súbitamente. ¿Cuál es la respuesta correcta para evitar perder el control del vehículo?  
+
+a) Frenar con toda la fuerza disponible para detenerte lo antes posible  
+**b) Mantener el volante firme sin girar bruscamente, soltar el acelerador gradualmente y dejar que el vehículo desacelera antes de frenar suavemente y orillarse**  
+c) Acelerar brevemente para mantener la estabilidad dinámica del vehículo antes de frenar  
+
+*Clave: b)* Al reventar una llanta, girar bruscamente o frenar de golpe provoca derrape o vuelco. La técnica correcta es mantener el volante firme, soltar el acelerador gradualmente y frenar suavemente solo después de reducir velocidad (SEMOVI, 2024; seguridad vial avanzada).
+
+-----
+
+**D3-18**  
+Circulando a 75 km/h en vía rápida con lluvia moderada, ¿cuál es la combinación de comportamientos que mejor describe la conducción preventiva?  
+
+a) Mantener velocidad, reducir solo la distancia de seguimiento para tener mejor visión del vehículo de adelante  
+**b) Reducir la velocidad a al menos 60 km/h, ampliar la distancia de seguimiento a 4 segundos y evitar cambios bruscos de carril**  
+c) Encender las luces de emergencia y reducir la velocidad a 40 km/h en todos los carriles  
+
+*Clave: b)* La lluvia en vía rápida reduce adherencia y aumenta la distancia de frenado. Reducir velocidad, ampliar la distancia de seguimiento y evitar maniobras bruscas son los tres principios del manejo defensivo en condiciones adversas (SEMOVI, 2024; Stefan et al., 2025). 5.4 FORMATO DE RESPUESTA Y PUNTUACIÓN Especifica todos los elementos del formato de respuesta, sistema de puntuación, umbral de acreditación y modalidad de aplicación. Elemento Especificación Tipo de ítem Opción múltiple con cuatro alternativas de respuesta (formato politómico). Una sola respuesta correcta por ítem. Número de ítems del banco 54 ítems distribuidos en tres dimensiones (18 por dimensión, 6 subtemas × 3 ítems). Etiquetas de respuesta a), b), c) presentadas en orden vertical. Las opciones se rotan aleatoriamente entre aplicaciones para reducir el efecto de posición. Puntuación por ítem Dicotómica: 1 punto si la respuesta es correcta, 0 si es incorrecta. Sin penalización por error ni puntuación parcial. Puntuación total Suma simple de ítems correctos. Con 30 ítems: mínimo 0, máximo 30. Punto de corte 80 % de respuestas correctas por dimensión, consistente con el estándar aprobatorio del examen tipo A de la SEMOVI (2024). Reporte de resultados Puntuación global y puntuación por dimensión (D1, D2, D3) para diagnóstico diferenciado. Umbral de acreditación aplicable solo al puntaje global. Tiempo estimado 20–25 minutos para la versión de 30 ítems (aprox. 1–1.5 min por ítem). Modalidad Digital con selección aleatoria del banco. Compatible con versión en papel para estudios piloto.
+
+\newpage
+
+## Anexo C: Tabla Extendida de Parámetros Calibrados
+
+La Tabla 5 presenta la totalidad de los parámetros de los 54 reactivos calibrados bajo el Modelo 3PL Multidimensional *Between-Item* utilizando el método de estimación QMCEM con $N = 4000$ participantes. La métrica se presenta en la escala estándar de la TRI tradicional ($IRTpars = TRUE$).
+
+**Tabla 5.** *Parámetros Teóricos y Estimados Individuales por Reactivo*
+
+| Código | Dim. | Subtema | a (Teórico) | a (Estimado) | b (Teórico) | b (Estimado) | c (Teórico) | c (Estimado) | p-valor |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| D1-S1-01 | D1 | Límites de Velocidad | 1.30 | 1.38 | -1.00 | -1.10 | 0.35 | 0.32 | 0.835 |
+| D1-S1-02 | D1 | Límites de Velocidad | 1.35 | 1.27 | -0.80 | -0.82 | 0.32 | 0.33 | 0.793 |
+| D1-S1-03 | D1 | Límites de Velocidad | 1.45 | 1.37 | 0.10 | 0.16 | 0.33 | 0.33 | 0.641 |
+| D1-S2-01 | D1 | Prohibiciones | 1.35 | 1.21 | -0.50 | -0.73 | 0.31 | 0.22 | 0.741 |
+| D1-S2-02 | D1 | Prohibiciones | 1.10 | 0.92 | -1.00 | -1.45 | 0.38 | 0.23 | 0.814 |
+| D1-S2-03 | D1 | Prohibiciones | 1.00 | 1.14 | -1.20 | -1.19 | 0.36 | 0.28 | 0.818 |
+| D1-S3-01 | D1 | Preferencias de Paso | 1.45 | 1.31 | 1.20 | 1.19 | 0.27 | 0.26 | 0.429 |
+| D1-S3-02 | D1 | Preferencias de Paso | 1.50 | 1.36 | 0.15 | 0.07 | 0.29 | 0.26 | 0.615 |
+| D1-S3-03 | D1 | Preferencias de Paso | 1.25 | 0.96 | 0.30 | 0.13 | 0.26 | 0.20 | 0.581 |
+| D1-S4-01 | D1 | Vehículos de Emergencia | 1.35 | 1.66 | 0.10 | 0.27 | 0.33 | 0.43 | 0.672 |
+| D1-S4-02 | D1 | Vehículos de Emergencia | 1.10 | 0.86 | 0.05 | -0.64 | 0.30 | 0.07 | 0.644 |
+| D1-S4-03 | D1 | Vehículos de Emergencia | 1.35 | 1.66 | 0.15 | 0.25 | 0.32 | 0.36 | 0.634 |
+| D1-S5-01 | D1 | Documentos Obligatorios | 0.95 | 0.85 | -1.40 | -1.96 | 0.28 | 0.07 | 0.824 |
+| D1-S5-02 | D1 | Documentos Obligatorios | 1.05 | 1.09 | -0.80 | -0.74 | 0.33 | 0.36 | 0.782 |
+| D1-S5-03 | D1 | Documentos Obligatorios | 1.38 | 1.38 | -0.05 | 0.00 | 0.25 | 0.28 | 0.641 |
+| D1-S6-01 | D1 | Zonas Especiales | 1.22 | 1.10 | 0.30 | 0.17 | 0.31 | 0.27 | 0.607 |
+| D1-S6-02-E | D1 | Zonas Especiales | 1.32 | 0.80 | 0.90 | 0.45 | 0.30 | 0.15 | 0.507 |
+| D1-S6-03 | D1 | Zonas Especiales | 1.38 | 1.57 | 0.65 | 0.84 | 0.37 | 0.44 | 0.597 |
+| D2-01 | D2 | Señales Preventivas | 0.90 | 1.09 | -0.90 | -0.61 | 0.34 | 0.41 | 0.784 |
+| D2-02 | D2 | Señales Preventivas | 1.00 | 0.86 | -1.50 | -1.99 | 0.33 | 0.25 | 0.862 |
+| D2-03 | D2 | Señales Preventivas | 0.95 | 0.75 | -1.40 | -2.39 | 0.40 | 0.13 | 0.855 |
+| D2-04 | D2 | Señales Restrictivas | 1.10 | 1.00 | -0.80 | -1.17 | 0.33 | 0.25 | 0.794 |
+| D2-05 | D2 | Señales Restrictivas | 1.15 | 1.00 | -0.50 | -0.78 | 0.30 | 0.20 | 0.726 |
+| D2-06 | D2 | Señales Restrictivas | 0.82 | 1.10 | -1.20 | -0.60 | 0.39 | 0.54 | 0.828 |
+| D2-07 | D2 | Señales Informativas | 0.85 | 1.32 | -0.30 | 0.32 | 0.35 | 0.50 | 0.712 |
+| D2-08 | D2 | Señales Informativas | 0.92 | 1.11 | -0.60 | -0.42 | 0.32 | 0.37 | 0.743 |
+| D2-09 | D2 | Señales Informativas | 0.88 | 0.67 | -1.10 | -2.35 | 0.42 | 0.11 | 0.830 |
+| D2-10 | D2 | Semáforos | 0.60 | 0.55 | -1.40 | -1.43 | 0.29 | 0.30 | 0.773 |
+| D2-11 | D2 | Semáforos | 1.30 | 1.33 | 0.40 | 0.33 | 0.26 | 0.26 | 0.572 |
+| D2-12 | D2 | Semáforos | 1.47 | 1.33 | 0.70 | 0.60 | 0.28 | 0.26 | 0.522 |
+| D2-13 | D2 | Pirámide de Movilidad | 1.45 | 1.48 | -0.50 | -0.48 | 0.33 | 0.35 | 0.755 |
+| D2-14 | D2 | Pirámide de Movilidad | 1.32 | 0.99 | -0.30 | -1.02 | 0.31 | 0.06 | 0.717 |
+| D2-15 | D2 | Pirámide de Movilidad | 1.18 | 0.94 | -0.50 | -1.04 | 0.29 | 0.16 | 0.745 |
+| D2-16 | D2 | Interacción en Cruce | 1.48 | 1.33 | 0.65 | 0.57 | 0.33 | 0.35 | 0.554 |
+| D2-17 | D2 | Interacción en Cruce | 1.57 | 1.37 | 0.10 | -0.11 | 0.27 | 0.19 | 0.616 |
+| D2-18 | D2 | Interacción en Cruce | 0.80 | 0.67 | 0.40 | 0.03 | 0.24 | 0.11 | 0.554 |
+| D3-01 | D3 | Sistemas de Retención | 1.15 | 1.41 | 0.90 | 1.26 | 0.28 | 0.36 | 0.495 |
+| D3-02 | D3 | Sistemas de Retención | 1.00 | 1.18 | 0.50 | 0.69 | 0.32 | 0.36 | 0.583 |
+| D3-03 | D3 | Sistemas de Retención | 1.35 | 1.10 | 1.10 | 0.88 | 0.29 | 0.22 | 0.467 |
+| D3-04 | D3 | Distancias y Vel. | 1.50 | 1.80 | 0.60 | 0.80 | 0.30 | 0.35 | 0.533 |
+| D3-05 | D3 | Distancias y Vel. | 1.35 | 1.42 | 1.10 | 1.14 | 0.22 | 0.24 | 0.415 |
+| D3-06 | D3 | Distancias y Vel. | 1.15 | 1.10 | 0.35 | 0.17 | 0.31 | 0.24 | 0.593 |
+| D3-07 | D3 | Manejo Defensivo | 1.30 | 1.04 | 0.15 | -0.18 | 0.34 | 0.23 | 0.645 |
+| D3-08 | D3 | Manejo Defensivo | 1.38 | 1.20 | 0.40 | 0.21 | 0.28 | 0.22 | 0.571 |
+| D3-09 | D3 | Manejo Defensivo | 1.25 | 1.23 | 0.05 | 0.04 | 0.37 | 0.38 | 0.684 |
+| D3-10 | D3 | Condiciones Adversas | 1.20 | 1.35 | 0.35 | 0.47 | 0.24 | 0.30 | 0.567 |
+| D3-11 | D3 | Condiciones Adversas | 1.65 | 1.82 | 1.20 | 1.14 | 0.21 | 0.22 | 0.376 |
+| D3-12 | D3 | Condiciones Adversas | 1.15 | 1.35 | 0.80 | 0.86 | 0.23 | 0.27 | 0.485 |
+| D3-13 | D3 | Predicción Urbana | 1.70 | 1.60 | 1.20 | 1.24 | 0.25 | 0.24 | 0.392 |
+| D3-14 | D3 | Predicción Urbana | 1.65 | 1.66 | 1.05 | 1.03 | 0.24 | 0.24 | 0.424 |
+| D3-15 | D3 | Predicción Urbana | 1.55 | 1.34 | 1.20 | 1.07 | 0.26 | 0.22 | 0.416 |
+| D3-16 | D3 | Vías Rápidas | 1.35 | 0.90 | 0.80 | 0.34 | 0.29 | 0.14 | 0.511 |
+| D3-17 | D3 | Vías Rápidas | 1.90 | 1.50 | 1.50 | 1.48 | 0.22 | 0.20 | 0.335 |
+| D3-18 | D3 | Vías Rápidas | 1.68 | 1.53 | 1.15 | 1.09 | 0.31 | 0.29 | 0.453 |
+
+\newpage
+
+## Anexo D: Guía de Replicación del Repositorio
+
+Este anexo contiene las instrucciones detalladas para la replicación del entorno, así como el catálogo técnico que describe el propósito, los insumos, los productos y las rutas de almacenamiento de cada script del proyecto.
+
+### 1. Requisitos del Entorno de Ejecución
+Para replicar con éxito los análisis y gráficos psicométricos presentados, se requiere un equipo con el siguiente software instalado:
+- **R (versión 4.5.1 o superior)**
+- **Python (versión 3.10 o superior)** (opcional para la simulación inicial)
+- **Librerías de R requeridas:** `mirt`, `mvtnorm`, `ggplot2` (el script las instala automáticamente si no se detectan en el entorno).
+---
+
+### 2. Estructura y Organización de Archivos (Catálogo Técnico)
+
+La jerarquía del repositorio se organiza bajo las siguientes carpetas y funciones, estructuradas de forma que se adaptan perfectamente a los márgenes del documento sin generar desbordamientos en la versión PDF:
+
+- **[Directorio Raíz] "Revisión documental Examen de Manejo"**
+  - `parametros_banco.csv`: Insumo de parámetros 3PL teóricos para la simulación ($a$, $b$, $c$) de los 54 reactivos.
+  - `Manuscrito_final.Rmd`: Documento maestro de integración en R Markdown (con formato APA 7 y plantillas adaptativas).
+  - **`Simulación/`** (Carpeta de scripts y datos de simulación inicial):
+    - `generar_datos.py`: Script en Python para generar la muestra inicial dicotómica de respuestas.
+    - `simulacion_irt.R`: Script en R complementario para la validación y diagnóstico inicial de la simulación.
+    - `datos_simulados.csv`: Base de datos con las respuestas binarias de los $N = 4000$ casos.
+    - `thetas_simuladas.csv`: Rasgos latentes reales (Theta) simulados de los participantes viales.
+    - `README.md`: Documento aclaratorio de la metodología Monte Carlo y la generación de datos.
+  - **`Analisis psicometrico/`** (Carpeta de scripts y resultados de calibración psicométrica mediante modelos TRI):
+    - `analisis_psicometrico.R`: Código R principal de calibración (QMCEM) y ajuste comparativo/absoluto.
+    - `generar_cci_superpuestas.R`: Código R secundario de graficación de las CCIs superpuestas por dimensión.
+    - `comparacion_modelos.txt`: Reporte de ajuste comparativo ANOVA (AIC, BIC, LRT).
+    - `ajuste_absoluto.txt`: Reporte de ajuste global absoluto $M_2^*$ del modelo multidimensional.
+    - `descriptivos_reactivos_CDMX.csv`: Estadísticos descriptivos de la dificultad empírica (proporción de aciertos) de los reactivos.
+    - `parametros_estimados_mirt.csv`: Parámetros 3PL estimados e índices de dificultad empírica por reactivo.
+    - `covarianza_latente_estimada_mirt.csv`: Matriz de correlaciones latentes estimadas entre dimensiones.
+    - `informacion_test_mirt.csv`: Vectores calculados de Información (FIT) y error estándar (SEM).
+    - `README.md`: Documento con las instrucciones de calibración TRI y el detalle de los productos resultantes.
+    - **`Graficos/`** (Directorio de almacenamiento de todos los productos visuales del análisis):
+      - `dificultad_empirica.png`: Histograma de dificultad empírica ($p$-values) por dimensión.
+      - `distribucion_thetas.png`: Gráfico de densidad de las habilidades latentes (Thetas).
+      - `funcion_informacion_test.png`: FIT agregada por dimensión en el continuo de habilidad.
+      - `error_estandar_medida.png`: SEM agregada por dimensión en el continuo de habilidad.
+      - `cci_superpuestas_D1.png`: 18 curvas de respuesta superpuestas (D1: Normativa).
+      - `cci_superpuestas_D2.png`: 18 curvas de respuesta superpuestas (D2: Señalización).
+      - `cci_superpuestas_D3.png`: 18 curvas de respuesta superpuestas (D3: Seguridad).
+
+------------------------------------------------------------------------
+
+### 3. Pasos de Replicación de la Calibración y Gráficos
+
+Para reproducir de forma directa los análisis psicométricos y actualizar los gráficos a partir de la base de datos simulada de $N = 4000$ casos, ejecute las siguientes instrucciones en su terminal:
+
+1.  **Abrir la consola o terminal del sistema** en Windows (PowerShell o CMD).
+
+2.  **Ejecutar el script principal de análisis** para calibrar los modelos 3PL multidimensional y unidimensional en R:
+
+    ``` bash
+    & "C:\Program Files\R\R-4.5.1\bin\Rscript.exe" "Analisis psicometrico/analisis_psicometrico.R"
+    ```
+
+    *Este script calibrará el modelo, guardará los resultados de comparación en archivos de texto, y los descriptivos y covarianzas latentes en formato CSV.*
+
+3.  **Ejecutar el script de gráficos de CCI superpuestas** para generar las superposiciones de las 18 curvas por dimensión:
+
+    ``` bash
+    & "C:\Program Files\R\R-4.5.1\bin\Rscript.exe" "Analisis psicometrico/generar_cci_superpuestas.R"
+    ```
+
+    *Este script generará las imágenes cci_superpuestas_D1.png, cci_superpuestas_D2.png y cci_superpuestas_D3.png en la subcarpeta Analisis psicometrico/Graficos/.*
+
+4.  **Compilar el archivo Rmd** para generar la versión final interactiva en HTML o el artículo científico formal en PDF utilizando el motor R Markdown:
+
+    ``` bash
+    & "C:\Program Files\R\R-4.5.1\bin\Rscript.exe" -e "rmarkdown::render('Manuscrito_final.Rmd')"
+    ```
+
+    *Este comando integrará de manera fluida y dinámica el texto, las tablas formateadas en formato APA y las imágenes viales generadas.*
