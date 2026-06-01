@@ -1,0 +1,11 @@
+========================================================================
+COMPARACIÓN DE MODELOS DE MEDICIÓN - HITO 3
+========================================================================
+
+               AIC    SABIC       HQ      BIC    logLik       X2 df p
+fit_uni   256019.4 256524.2 256380.8 257039.0 -127847.7              
+fit_multi 253609.5 254123.8 253977.7 254648.1 -126639.8 2415.809  3 0
+
+Interpretación:
+AIC y BIC menores favorecen al mejor modelo en términos de parsimonia y ajuste.
+La prueba de Razón de Verosimilitud (LRT) evalúa si la mejora es estadísticamente significativa.
